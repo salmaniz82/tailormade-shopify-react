@@ -1,0 +1,10 @@
+.banner-green {
+    background-repeat: no-repeat;
+    background-image: url('/src/assets/clothlibrary.jpg');
+    min-height: 250px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
