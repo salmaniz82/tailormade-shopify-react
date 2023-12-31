@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Select from 'react-select';
+
 
 const MySelectComponent = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);

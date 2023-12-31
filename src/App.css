@@ -262,7 +262,7 @@ font-family: 'Urbanist', sans-serif;
     text-transform: capitalize;
 }
 
-.btAddToSwatcjed {
+.btAddToSwatcjed, .text_btn_lg {
     text-align: center;
     border: 1px solid rgba(18,18,18,0.5);
     padding: 10px 20px;
@@ -282,7 +282,7 @@ font-family: 'Urbanist', sans-serif;
 .selectedSwatch_item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    
     border-bottom: 1px solid rgba(213,201,201,0.25);
     margin-bottom: 10px;
     margin-top: 10px;
@@ -351,6 +351,7 @@ font-family: 'Urbanist', sans-serif;
     padding: 5px 10px;
     color: rgba(18,18,18,0.75);
     user-select: none;
+    flex: 1;
     
 }
 

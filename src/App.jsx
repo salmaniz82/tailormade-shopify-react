@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import MySelectComponent from "./components/select/test.jsx";
-import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL } from "./utils/helpers.js";
-
+import SwatchesColumn from "./components/swatches/SwatchesSelected.jsx";
+import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams } from "./utils/helpers.js";
 import SwatchModel from "./components/models/SwatchModel.jsx";
+
+import Select from "react-select";
 
 /*
 import Banner from './components/banner/Banner.jsx';
@@ -17,14 +18,13 @@ function App() {
   const [swatches_request_url, setsSatches_request_url] = useState(API_BASE_URL + "swatches");
   const [swatchListings, setSwatchListings] = useState([]);
   const [filters, setFilters] = useState([]);
-
   const [listMeta, setListMeta] = useState([]);
   const [pages, setPages] = useState([0]);
-
   const [loadedImages, setLoadedImages] = useState({});
   const [swatchModelActive, setSwatchModelActive] = useState(false);
   const [swatchModelItem, setSwatchModelItem] = useState(null);
   const [selectedSwatches, setSelectedSwatches] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   const standaAloneAddSwatchHelperUpdate = (swatchItemToAdd) => {
     setSelectedSwatches((existingSwatches) => {
@@ -67,26 +67,61 @@ function App() {
     });
   };
 
-  const applySwatchfilter = (parentFilter, filterValue) => {
-    if (parentFilter == "COLOUR") parentFilter = "colors";
+  const prepareFilters = (filterName, filterValue) => {
+    if (filterName === "COLOUR") filterName = "colors";
+
+    const filterIndex = selectedFilters.findIndex((filter) => filter.filterHeader === filterName);
+
+    const updatedFilters = (prevFilters) => {
+      if (filterIndex !== -1) {
+        // Update existing filter
+        const existingFilter = [...prevFilters];
+        existingFilter[filterIndex].values = filterValue.map((value) => value.value);
+        return existingFilter.filter((filter) => filter.values.length > 0); // Filter out empty values
+      } else {
+        // Add new filter
+        return [...prevFilters, { filterHeader: filterName, values: filterValue.map((value) => value.value) }];
+      }
+    };
+
+    // Set the selected filters
+    setSelectedFilters(updatedFilters);
+
+    // Note: The state update is asynchronous, so the log statement may not immediately reflect the updated state
+    console.log(selectedFilters);
+  };
+
+  const applyFilters = () => {
+    let filterCopy = [...selectedFilters];
+
+    console.log("apply and fetch via filter params copy", filterCopy);
+
+    let encodedURL = buildFiltersUrlQueryParams(swatches_request_url, filterCopy);
+    let decodedURL = decodeURIComponent(encodedURL);
+
+    console.log("encodedurl", encodedURL);
+    console.log("decodedURL", decodedURL);
+
     setsSatches_request_url((existingUrl) => {
       let clearedUrl = clearAllQueryParams(existingUrl);
-      return updateQueryStringParameter(clearedUrl, parentFilter, filterValue);
+      return buildFiltersUrlQueryParams(clearedUrl, filterCopy);
     });
+  };
+
+  const removeFilters = () => {
+    /*DO WORK HERE WHILE REMOVEING THE FILTERS*/
   };
 
   const removeSelectedSwatch = (removeItemFromSelection) => {
     setSelectedSwatches((existingSwatches) =>
       existingSwatches.map((item) => {
         if (item.id === removeItemFromSelection.id) {
-          // Set isRemoving to true with a delay
           item.isRemoving = true;
         }
         return item;
       })
     );
 
-    // After a delay of 300ms, filter out the item
     setTimeout(() => {
       setSelectedSwatches((existingSwatches) => existingSwatches.filter((item) => item.id !== removeItemFromSelection.id));
     }, 300);
@@ -105,6 +140,11 @@ function App() {
     setSwatchModelItem((oldItem) => currentClickedItem);
     setSwatchModelActive(true);
   };
+
+  useEffect(() => {
+    console.log("useEffect called detected change in the selectedFilters", selectedFilters);
+    // Filter empty objects after state update
+  }, [selectedFilters]);
 
   useEffect(() => {
     (async () => {
@@ -129,7 +169,7 @@ function App() {
       <div className="clotAppWrap">
         {swatchModelActive && <SwatchModel swatchModelItem={swatchModelItem} closeSwatchModel={closeSwatchModel} onSwatchAdd={handleSwatchAdd} />}
 
-        <div className="banner">this will be the banner</div>
+        <div className="banner">Banner here...</div>
         <div className="swatchPagination">
           <ul>
             {pages.length > 1 &&
@@ -146,7 +186,7 @@ function App() {
         <div className="clothSwatchColWrap">
           <div className="swatchFilter box-border">
             <h2>Matched Items : ( {listMeta.total} )</h2>
-            <h2>Filter By</h2>
+
             <div>
               <h3>Source</h3>
               <div onClick={(e) => handleSource(e, "foxflannel.com")}>foxflannel</div>
@@ -155,21 +195,28 @@ function App() {
               <div onClick={(e) => handleSource(e, "harrisons1863.com")}>harrisons</div>
             </div>
 
-            <div>
-              <h3>Test Select search</h3>
-              <MySelectComponent />
+            <div className="swatch_apply_filters">
+              <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>
+                APPLY FILTERS
+              </div>
             </div>
 
+            <h2>Filter By</h2>
             {listMeta.source === "foxflannel.com" && (
               <div className="foxFlannel-filter">
                 {filters.map((filter, filterIndex) => (
                   <div key={filterIndex}>
-                    <h3>{filter.name}</h3>
-                    {filter.items.map((item, itemIndex) => (
-                      <p key={itemIndex} onClick={() => applySwatchfilter(filter.name, item)}>
-                        {item}
-                      </p>
-                    ))}
+                    <h5>{filter.name}</h5>
+                    <Select
+                      isMulti
+                      options={filter.items.map((item, itemIndex) => ({
+                        value: item,
+                        label: item,
+                      }))}
+                      onChange={(selectedOptions) => {
+                        prepareFilters(filter.name, selectedOptions);
+                      }}
+                    />
                   </div>
                 ))}
               </div>
@@ -194,42 +241,8 @@ function App() {
               )}
             </div>
           </div>
-          <div className="selectedSwatches box-border">
-            <div className="stickySelectionSection">
-              <div className="swatchCounter">
-                {selectedSwatches.length > 0 ? (
-                  <>
-                    <span className="counterLabel">
-                      Added <small className="counnter_label"> ( {selectedSwatches.length} ) </small>
-                    </span>
-                  </>
-                ) : (
-                  <p style={{ textTransform: "uppercase" }}> Add Your Favorites Swatches </p>
-                )}
-              </div>
 
-              <div className="selectedSwatchItemWrap">
-                {selectedSwatches
-                  .slice()
-                  .reverse()
-                  .map((selectedItem) => (
-                    <div key={selectedItem.id} className={`selectedSwatch_item ${selectedItem.isRemoving ? "slide-out" : "slide-in"}`}>
-                      <div className="swatch_thumb">
-                        <img src={`${API_BASE_URL}${selectedItem.imageUrl}`} alt="" />
-                      </div>
-                      <div className="swatchTitle_selected">{selectedItem.title}</div>
-                      <div className="removeSwatchControl" onClick={() => removeSelectedSwatch(selectedItem)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" aria-hidden="true" focusable="false" role="presentation" className="icon-close" fill="none" viewBox="0 0 18 17">
-                          <path
-                            d="M.865 15.978a.5.5 0 00.707.707l7.433-7.431 7.579 7.282a.501.501 0 00.846-.37.5.5 0 00-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 10-.707-.708L8.991 7.853 1.413.573a.5.5 0 10-.693.72l7.563 7.268-7.418 7.417z"
-                            fill="currentColor"></path>
-                        </svg>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </div>
+          <SwatchesColumn selectedSwatches={selectedSwatches} removeSelectedSwatch={removeSelectedSwatch} />
         </div>
       </div>
     </>
