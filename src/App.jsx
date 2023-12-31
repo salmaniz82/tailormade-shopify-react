@@ -15,7 +15,11 @@ import "./App.css";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [swatches_request_url, setsSatches_request_url] = useState(API_BASE_URL + "swatches");
+
+  const storedSwatchesRequestUrl = localStorage.getItem("swatches_request_url");
+  const initialSwatchesRequestUrl = storedSwatchesRequestUrl || API_BASE_URL + "swatches";
+
+  const [swatches_request_url, setsSatches_request_url] = useState(initialSwatchesRequestUrl);
   const [swatchListings, setSwatchListings] = useState([]);
   const [filters, setFilters] = useState([]);
   const [listMeta, setListMeta] = useState([]);
@@ -162,6 +166,8 @@ function App() {
       }
       setLoading(false);
     })();
+
+    localStorage.setItem("swatches_request_url", swatches_request_url);
   }, [swatches_request_url]);
 
   return (
