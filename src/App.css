@@ -129,6 +129,16 @@ font-family: 'Urbanist', sans-serif;
     min-width: calc(100% / 4);
     cursor: pointer;
     box-shadow: 0px 0px 5px 1px rgb(18 18 18 / 15%);
+    transition: all .2s ease-in;
+    transform: translate3d(0,0,0);
+    border-bottom: 1px solid transparent;
+}
+
+.clotAppWrap .swatchItem:hover {
+
+    transform: translate3d(0,-3px,0);
+    border-bottom: 1px solid rgb(18, 228, 217);
+
 }
 
 .itemImage_container.pending-imgLoad {
@@ -273,7 +283,7 @@ font-family: 'Urbanist', sans-serif;
     user-select: none;
 }
 
-.btAddToSwatcjed:active {
+.btAddToSwatcjed:active, .text_btn_lg:active {
     border: 1px solid green;
     transform: scale(0.95);
 }
@@ -392,5 +402,30 @@ font-family: 'Urbanist', sans-serif;
     
 }
 
+.makeRequestBlock {
+width: 100%;
+}
 
+.requestSwatchEmailInput {
+
+    font-size: 16px;
+    color: rgba(18,18,18,0.75);
+    display: inline-block;
+    width: 100%;
+    box-shadow: none;
+    outline: none;
+    border: 1px solid rgba(18,18,18,0.5);
+    max-width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-right: -5px;
+}
+
+.text__color_lightGrey {
+    color: rgba(18,18,18,0.75);
+}
+
+.text__size_sm {
+    font-size: 15px;
+}
 

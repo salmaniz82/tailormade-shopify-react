@@ -1,6 +1,54 @@
-import { API_BASE_URL } from "../../utils/helpers.js";
+import { useRef } from "react";
+import { API_BASE_URL, validateEmail } from "../../utils/helpers.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SwatchesSelected({ selectedSwatches, removeSelectedSwatch }) {
+  const emailRef = useRef(null);
+
+  const handleRequestSwatches = () => {
+    let request_swatch_url = `${API_BASE_URL}request-swatch`;
+    let emailValidation = false;
+    let customerEmail = emailRef.current.value;
+
+    if (customerEmail.trim() === "") {
+      toast.error("Please enter email");
+    } else if (validateEmail(customerEmail)) {
+      emailValidation = true;
+    } else {
+      toast.error("Provided email is invalid");
+    }
+
+    if (!emailValidation) return;
+
+    let requestBodyPaylod = JSON.stringify({
+      customerEmail,
+      swachtes: selectedSwatches,
+    });
+
+    fetch(request_swatch_url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: requestBodyPaylod,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          console.log("res is ok");
+          return res.json();
+        }
+
+        return res.json().then((err) => Promise.reject(err));
+      })
+      .then((dataJson) => {
+        toast.success(dataJson.message);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
   return (
     <div className="selectedSwatches box-border">
       <div className="stickySelectionSection">
@@ -36,7 +84,20 @@ function SwatchesSelected({ selectedSwatches, removeSelectedSwatch }) {
               </div>
             ))}
         </div>
+
+        {selectedSwatches.length > 0 && (
+          <>
+            <div className="makeRequestBlock">
+              <label htmlFor="requestSwatchEmailInput text__color_lightGrey text__size_sm">Enter Your Email:</label>
+              <input type="email" placeholder="Email" className="requestSwatchEmailInput" id="requestSwatchEmailInput" ref={emailRef} />
+              <div className="requestSwatch text_btn_lg" onClick={handleRequestSwatches} style={{ marginTop: "5px" }}>
+                REQUEST SWATCH
+              </div>
+            </div>
+          </>
+        )}
       </div>
+      <ToastContainer />
     </div>
   );
 }

@@ -5,12 +5,6 @@ import SwatchModel from "./components/models/SwatchModel.jsx";
 
 import Select from "react-select";
 
-/*
-import Banner from './components/banner/Banner.jsx';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-*/
-
 import "./App.css";
 
 function App() {
@@ -175,7 +169,6 @@ function App() {
       <div className="clotAppWrap">
         {swatchModelActive && <SwatchModel swatchModelItem={swatchModelItem} closeSwatchModel={closeSwatchModel} onSwatchAdd={handleSwatchAdd} />}
 
-        <div className="banner">Banner here...</div>
         <div className="swatchPagination">
           <ul>
             {pages.length > 1 &&

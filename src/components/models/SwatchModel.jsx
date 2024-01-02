@@ -23,7 +23,7 @@ function SwatchModel({ swatchModelItem, closeSwatchModel, onSwatchAdd }) {
             <tbody>
               {Object.entries(JSON.parse(swatchModelItem.productMeta)).map(([key, value]) => (
                 <tr key={key}>
-                  <td className="swatchMetaHeading">{key} </td> <td className="swatchMetaValue">{value}</td>
+                  <td className="swatchMetaHeading">{key.trim()} </td> <td className="swatchMetaValue">{value.trim()}</td>
                 </tr>
               ))}
             </tbody>
