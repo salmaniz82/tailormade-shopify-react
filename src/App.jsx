@@ -46,12 +46,7 @@ function App() {
   };
 
   const handleSwatchAdd = (swatchItemToAdd) => {
-    /*
-    pussing to the array
-    setSelectedSwatches((existingSwatches) => [...existingSwatches, swatchItemToAdd]);
-    */
     standaAloneAddSwatchHelperUpdate(swatchItemToAdd);
-
     closeSwatchModel();
   };
 
@@ -105,23 +100,13 @@ function App() {
       }
     };
 
-    // Set the selected filters
     setSelectedFilters(updatedFilters);
 
-    // Note: The state update is asynchronous, so the log statement may not immediately reflect the updated state
     console.log(selectedFilters);
   };
 
   const applyFilters = () => {
     let filterCopy = [...selectedFilters];
-
-    console.log("apply and fetch via filter params copy", filterCopy);
-
-    let encodedURL = buildFiltersUrlQueryParams(swatches_request_url, filterCopy);
-    let decodedURL = decodeURIComponent(encodedURL);
-
-    console.log("encodedurl", encodedURL);
-    console.log("decodedURL", decodedURL);
 
     setsSatches_request_url((existingUrl) => {
       let clearedUrl = clearAllQueryParams(existingUrl);
@@ -155,9 +140,7 @@ function App() {
 
   const openSwatchModel = (e, currentClickedItem) => {
     e.preventDefault();
-
     currentClickedItem.isRemoving = false;
-
     setSwatchModelItem((oldItem) => currentClickedItem);
     setSwatchModelActive(true);
   };

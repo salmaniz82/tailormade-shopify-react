@@ -13,9 +13,7 @@ function updateQueryStringParameter(url, key, value) {
   } else {
     queryParams.append(key, value);
   }
-
   urlObject.search = queryParams.toString();
-
   return urlObject.toString();
 }
 
@@ -27,24 +25,18 @@ function clearAllQueryParams(url) {
 
 function buildFiltersUrlQueryParams(url, filters) {
   const urlObject = new URL(url);
-  const queryParams = new URLSearchParams(urlObject.search); // Extract existing params
+  const queryParams = new URLSearchParams(urlObject.search);
 
   filters.forEach((filter) => {
     const { filterHeader, values } = filter;
 
     if (values && values.length > 0) {
-      /*
-      const paramValue = encodeURIComponent(values.join(",")); // Encode entire value string
-      */
-
-      const paramValue = values.join(","); // Encode entire value string
-
-      queryParams.set(filterHeader, paramValue); // Set (overwrite) instead of append
+      const paramValue = values.join(",");
+      queryParams.set(filterHeader, paramValue);
     }
   });
 
   urlObject.search = queryParams.toString();
-
   return urlObject.toString();
 }
 

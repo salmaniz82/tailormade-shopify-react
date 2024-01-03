@@ -8,10 +8,6 @@ function SwatchesSelected({ selectedSwatches, removeSelectedSwatch, removeAllSwa
 
   const [swatchesSent, setSentSwathes] = useState(false);
 
-  const handleClearAll = () => {
-    console.log("remove All");
-  };
-
   const handleRequestSwatches = () => {
     let request_swatch_url = `${API_BASE_URL}request-swatch`;
     let emailValidation = false;
