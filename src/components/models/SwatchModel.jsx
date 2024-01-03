@@ -30,8 +30,10 @@ function SwatchModel({ swatchModelItem, closeSwatchModel, onSwatchAdd }) {
           </table>
         </div>
 
-        <div className="btAddToSwatcjed" onClick={(event) => onSwatchAdd(swatchModelItem)}>
-          ADD TO SWATCH
+        <div className="flashButtonWrapper">
+          <div className="btAddToSwatcjed" onClick={(event) => onSwatchAdd(swatchModelItem)}>
+            ADD TO SWATCH
+          </div>
         </div>
       </div>
     </div>

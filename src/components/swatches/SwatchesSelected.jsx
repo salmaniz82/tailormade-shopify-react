@@ -1,10 +1,16 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { API_BASE_URL, validateEmail } from "../../utils/helpers.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function SwatchesSelected({ selectedSwatches, removeSelectedSwatch }) {
+function SwatchesSelected({ selectedSwatches, removeSelectedSwatch, removeAllSwatches }) {
   const emailRef = useRef(null);
+
+  const [swatchesSent, setSentSwathes] = useState(false);
+
+  const handleClearAll = () => {
+    console.log("remove All");
+  };
 
   const handleRequestSwatches = () => {
     let request_swatch_url = `${API_BASE_URL}request-swatch`;
@@ -43,6 +49,7 @@ function SwatchesSelected({ selectedSwatches, removeSelectedSwatch }) {
       })
       .then((dataJson) => {
         toast.success(dataJson.message);
+        setSentSwathes(true);
       })
       .catch((error) => {
         toast.error(error.message);
@@ -56,8 +63,12 @@ function SwatchesSelected({ selectedSwatches, removeSelectedSwatch }) {
           {selectedSwatches.length > 0 ? (
             <>
               <span className="counterLabel">
-                Added <small className="counnter_label"> ( {selectedSwatches.length} ) </small>
+                Added Swatches <small className="counnter_label"></small>
               </span>
+
+              <div className="clearAll-wrap" onClick={removeAllSwatches}>
+                Clear All ( {selectedSwatches.length} )
+              </div>
             </>
           ) : (
             <p style={{ textTransform: "uppercase" }}> Add Your Favorites Swatches </p>
@@ -85,15 +96,24 @@ function SwatchesSelected({ selectedSwatches, removeSelectedSwatch }) {
             ))}
         </div>
 
-        {selectedSwatches.length > 0 && (
+        {selectedSwatches.length > 0 && !swatchesSent && (
           <>
             <div className="makeRequestBlock">
               <label htmlFor="requestSwatchEmailInput text__color_lightGrey text__size_sm">Enter Your Email:</label>
               <input type="email" placeholder="Email" className="requestSwatchEmailInput" id="requestSwatchEmailInput" ref={emailRef} />
-              <div className="requestSwatch text_btn_lg" onClick={handleRequestSwatches} style={{ marginTop: "5px" }}>
-                REQUEST SWATCH
+
+              <div className="flashButtonWrapper">
+                <div className="requestSwatch text_btn_lg" onClick={handleRequestSwatches} style={{ marginTop: "5px" }}>
+                  REQUEST SWATCH
+                </div>
               </div>
             </div>
+          </>
+        )}
+
+        {selectedSwatches.length > 0 && swatchesSent && (
+          <>
+            <p className="postSwatchSentBlock"> Your request for ( {selectedSwatches.length} ) swatches has been sent!. 👌 </p>
           </>
         )}
       </div>

@@ -13,6 +13,13 @@ function App() {
   const storedSwatchesRequestUrl = localStorage.getItem("swatches_request_url");
   const initialSwatchesRequestUrl = storedSwatchesRequestUrl || API_BASE_URL + "swatches";
 
+  const [swatchSources, setSwatchSources] = useState([
+    { name: "foxflannel", url: "foxflannel.com", active: false },
+    { name: "loropiana", url: "loropiana.com", active: false },
+    { name: "dugdalebros", url: "shop.dugdalebros.com", active: false },
+    { name: "harrisons", url: "harrisons1863.com", active: false },
+  ]);
+
   const [swatches_request_url, setsSatches_request_url] = useState(initialSwatchesRequestUrl);
   const [swatchListings, setSwatchListings] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -32,6 +39,10 @@ function App() {
       }
       return existingSwatches;
     });
+  };
+
+  const removeAllSwatches = () => {
+    setSelectedSwatches([]);
   };
 
   const handleSwatchAdd = (swatchItemToAdd) => {
@@ -59,9 +70,21 @@ function App() {
 
   const handleSource = (e, source) => {
     e.preventDefault();
+    var matchedSource = swatchSources.findIndex((item) => item.url == source);
+    console.log(matchedSource);
     setsSatches_request_url((existingUrl) => {
       let clearedUrl = clearAllQueryParams(existingUrl);
       return updateQueryStringParameter(clearedUrl, "source", source);
+    });
+
+    setSwatchSources((prevSources) => {
+      const updatedSources = prevSources.map((item) => {
+        return {
+          ...item,
+          active: item.url === source,
+        };
+      });
+      return updatedSources;
     });
   };
 
@@ -152,10 +175,27 @@ function App() {
       if (response.filters != undefined) {
         setFilters(response.filters);
       }
+
       setListMeta(response.meta);
+
+      const markActiveSwatchSource = (currentState, sourceValue) => {
+        return currentState.map((source) => {
+          if (source.url === sourceValue) {
+            return { ...source, active: true };
+          } else {
+            return { ...source, active: false };
+          }
+        });
+      };
+
+      const updatedSources = markActiveSwatchSource(swatchSources, response.meta.source);
+
+      setSwatchSources(updatedSources);
+
       setSwatchListings(response.collections);
       if (response.meta.pages != undefined) {
         let generatedPagesArray = generateNumberArray(response.meta.pages);
+
         setPages((oldpages) => generatedPagesArray);
       }
       setLoading(false);
@@ -188,24 +228,89 @@ function App() {
 
             <div>
               <h3>Source</h3>
-              <div onClick={(e) => handleSource(e, "foxflannel.com")}>foxflannel</div>
-              <div onClick={(e) => handleSource(e, "loropiana.com")}>loropiana</div>
-              <div onClick={(e) => handleSource(e, "shop.dugdalebros.com")}>dugdalebros.com</div>
-              <div onClick={(e) => handleSource(e, "harrisons1863.com")}>harrisons</div>
+
+              <div className="sourceItemList">
+                {swatchSources.map((source) => (
+                  <div className={`source-item ${source.active ? "active" : ""}`} onClick={(e) => handleSource(e, source.url)}>
+                    {source.name}
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="swatch_apply_filters">
-              <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>
-                APPLY FILTERS
+              <div className="flashButtonWrapper">
+                <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>
+                  APPLY FILTERS
+                </div>
               </div>
             </div>
 
             <h2>Filter By</h2>
-            {listMeta.source === "foxflannel.com" && (
-              <div className="foxFlannel-filter">
+            {filters.length > 0 && listMeta.source == "foxflannel.com" && (
+              <div className="filter-labels">
                 {filters.map((filter, filterIndex) => (
                   <div key={filterIndex}>
-                    <h5>{filter.name}</h5>
+                    <h5>{filter.name.toLowerCase()}</h5>
+                    <Select
+                      isMulti
+                      options={filter.items.map((item, itemIndex) => ({
+                        value: item,
+                        label: item,
+                      }))}
+                      onChange={(selectedOptions) => {
+                        prepareFilters(filter.name, selectedOptions);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {filters.length > 0 && listMeta.source == "loropiana.com" && (
+              <div className="filter-labels">
+                {filters.map((filter, filterIndex) => (
+                  <div key={filterIndex}>
+                    <h5>{filter.name.toLowerCase()}</h5>
+                    <Select
+                      isMulti
+                      options={filter.items.map((item, itemIndex) => ({
+                        value: item,
+                        label: item,
+                      }))}
+                      onChange={(selectedOptions) => {
+                        prepareFilters(filter.name, selectedOptions);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {filters.length > 0 && listMeta.source == "shop.dugdalebros.com" && (
+              <div className="filter-labels">
+                {filters.map((filter, filterIndex) => (
+                  <div key={filterIndex}>
+                    <h5>{filter.name.toLowerCase()}</h5>
+                    <Select
+                      isMulti
+                      options={filter.items.map((item, itemIndex) => ({
+                        value: item,
+                        label: item,
+                      }))}
+                      onChange={(selectedOptions) => {
+                        prepareFilters(filter.name, selectedOptions);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            {filters.length > 0 && listMeta.source == "harrisons1863.com" && (
+              <div className="filter-labels">
+                {filters.map((filter, filterIndex) => (
+                  <div key={filterIndex}>
+                    <h5>{filter.name.toLowerCase()}</h5>
                     <Select
                       isMulti
                       options={filter.items.map((item, itemIndex) => ({
@@ -239,9 +344,11 @@ function App() {
                 </div>
               )}
             </div>
+
+            {!loading && swatchListings.length == 0 && <div className="no-records">No records were found in matching criteria!</div>}
           </div>
 
-          <SwatchesColumn selectedSwatches={selectedSwatches} removeSelectedSwatch={removeSelectedSwatch} />
+          <SwatchesColumn selectedSwatches={selectedSwatches} removeSelectedSwatch={removeSelectedSwatch} removeAllSwatches={removeAllSwatches} />
         </div>
       </div>
     </>
