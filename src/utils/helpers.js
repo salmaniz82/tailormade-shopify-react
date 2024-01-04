@@ -17,6 +17,12 @@ function updateQueryStringParameter(url, key, value) {
   return urlObject.toString();
 }
 
+function getUrlParamValueByKey(url, key) {
+  const urlObject = new urlObject(url);
+  const queryParams = new URLSearchParams(urlObject.search);
+  return queryParams.get(key);
+}
+
 function clearAllQueryParams(url) {
   const urlObject = new URL(url);
   urlObject.search = "";
@@ -46,4 +52,4 @@ const validateEmail = (email) => {
     .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 };
 
-export { validateEmail, generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams };
+export { validateEmail, generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey };

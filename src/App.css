@@ -1,548 +1,482 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400&family=Urbanist&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400&family=Urbanist&display=swap");
 
 /*
-
 font-family: 'Urbanist', sans-serif;
 */
 
-
 .clotAppWrap {
-
-    font-family: 'Lato', sans-serif;
-
+  font-family: "Lato", sans-serif;
 }
-
 
 .clotAppWrap .banner {
-    border: 1px solid red;
+  border: 1px solid red;
 }
-
 
 .clothSwatchColWrap {
-    max-width: 1560px;
-    margin: 0 auto;
-    border: 1px solid blue;
-    padding: 20px 10px;
-    display: flex;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-
+  max-width: 1560px;
+  margin: 0 auto;
+  border: 1px solid blue;
+  padding: 20px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
 }
 
-/*
-<div className="swatchFilter">sidbar filter</div>
-<div className="swatchListings">Cloth Collection</div>
-<div className="selectedSwatches">Swatches selcted</div>
-*/
-
-.swatchFilter, .selectedSwatches, .swatchListings {
-    
+.swatchFilter,
+.selectedSwatches,
+.swatchListings {
 }
 
 .swatchFilter {
-    padding-right: 5px;
-    border-right: 1px solid #e3e3e3;
+  padding-right: 5px;
+  border-right: 1px solid #e3e3e3;
 }
 
 .selectedSwatches {
-    padding-left: 5px;
-    border-left: 1px solid #e3e3e3;
-    
+  padding-left: 5px;
+  border-left: 1px solid #e3e3e3;
 }
 
-.swatchFilter, .selectedSwatches{
-   
-    flex: 0 0 250px;
+.swatchFilter,
+.selectedSwatches {
+  flex: 0 0 250px;
 }
-.swatchListings{
-
-    flex: 1;
-    padding-left: 5px;
-    padding-right: 5px;
-
+.swatchListings {
+  flex: 1;
+  padding-left: 5px;
+  padding-right: 5px;
 }
-
 
 .box-border {
-
-    box-sizing: border-box;
-
+  box-sizing: border-box;
 }
 
-
 .swatchItemListing.loaded-grid {
-    display: grid;
-    gap: 15px;
-    grid-template-columns: repeat(4, 1fr);
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .swatchItemListing.pending-grid {
-    height: calc(100vh - 200px);
+  height: calc(100vh - 200px);
 }
 
 .swatchGridLoadingItem {
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    text-align: center;
-    flex-direction: column;
-
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  text-align: center;
+  flex-direction: column;
 }
-
-
 
 .swatchItem img {
-    max-width: 100%;
-    height: 100%;
-    object-fit: cover;
-    aspect-ratio: 2 /2.2;
-    object-position: center;
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 2 /2.2;
+  object-position: center;
 }
 
-.swatchPagination{
-
-    flex-basis: 100%;
-
+.swatchPagination {
+  flex-basis: 100%;
 }
 
-
-.swatchPagination ul{
-    display: flex;
-    list-style: none;
-    justify-content: center;
+.swatchPagination ul {
+  display: flex;
+  list-style: none;
+  justify-content: center;
 }
 
 .swatchPagination ul li {
-    cursor: pointer;
-    font-size: 20px;
-    padding: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
 }
 
 .swatchPagination ul li a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-
 .clotAppWrap .swatchItem {
-    min-width: calc(100% / 4);
-    cursor: pointer;
-    box-shadow: 0px 0px 5px 1px rgb(18 18 18 / 15%);
-    transition: all .2s ease-in;
-    transform: translate3d(0,0,0);
-    border-bottom: 1px solid transparent;
+  min-width: calc(100% / 4);
+  cursor: pointer;
+  box-shadow: 0px 0px 5px 1px rgb(18 18 18 / 15%);
+  transition: all 0.2s ease-in;
+  transform: translate3d(0, 0, 0);
+  border-bottom: 1px solid transparent;
 }
 
 .clotAppWrap .swatchItem:hover {
-
-    transform: translate3d(0,-3px,0);
-    border-bottom: 1px solid rgb(18, 228, 217);
-
+  transform: translate3d(0, -3px, 0);
+  border-bottom: 1px solid rgb(18, 228, 217);
 }
 
 .itemImage_container.pending-imgLoad {
-    width: 100%;
-    height: 248px;
-    display: block;
-    background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
-    animation: shimmer .5s infinite;
-    background-size: auto;
-    background-size: 1000px 100%;   
-    transition: .25s ease-in-out all
+  width: 100%;
+  height: 248px;
+  display: block;
+  background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+  animation: shimmer 0.5s infinite;
+  background-size: auto;
+  background-size: 1000px 100%;
+  transition: 0.25s ease-in-out all;
 }
 
 .itemImage_container > img {
-    transition: opacity .3s ease-in;
+  transition: opacity 0.3s ease-in;
 }
 
 .itemImage_container.pending-imgLoad img {
-    opacity: 0;
+  opacity: 0;
 }
 
 @keyframes shimmer {
-    0% {
-        background-position: -1000px 0
-    }
+  0% {
+    background-position: -1000px 0;
+  }
 
-    100% {
-        background-position: 1000px 0
-    }
+  100% {
+    background-position: 1000px 0;
+  }
 }
-
 
 .swatchTitle {
-    font-size: 14px;
-    color: rgba(18,18,18,0.75);
-    font-weight: 400;
-    padding: 10px 5px;
-    text-align: center;
+  font-size: 14px;
+  color: rgba(18, 18, 18, 0.75);
+  font-weight: 400;
+  padding: 10px 5px;
+  text-align: center;
 }
 
-
 .swatchModelWrapper {
-    display: flex;
-    max-width: 950px;
-    background: #fff;
-    width: 100%;
-    position: fixed;
-    z-index: 111;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    flex-direction: row;
-    max-height: 650px;
-    height: 100%;
-    border: 1px solid teal;
+  display: flex;
+  max-width: 950px;
+  background: #fff;
+  width: 100%;
+  position: fixed;
+  z-index: 111;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  flex-direction: row;
+  max-height: 650px;
+  height: 100%;
+  border: 1px solid teal;
 }
 
 .swatchModelWrapper .swatchImageWrapper {
-    flex-basis: 50%;
+  flex-basis: 50%;
 }
 
-
 .swatchModelWrapper .swatchImageWrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: left center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
 }
 
 .swatchContentDetails {
-    padding: 20px;
-    flex: 1;
-
+  padding: 20px;
+  flex: 1;
 }
 
-
-.close-button{
-
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    z-index: 1;
-    cursor: pointer;
-    background: #f7f7f7;
-    right: 0;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+.close-button {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+  background: #f7f7f7;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 
 .swatchActiveMetaInfo {
-    width: 100%;
-    display: block;
+  width: 100%;
+  display: block;
 }
 
 .swatchModelMetaDetails {
-    margin-top: 50px;
-    border-spacing: 0;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-    border-style: hidden;
-    width: 100%;
-    border: 0.1rem solid rgba(18,18,18,0.2);
-    
+  margin-top: 50px;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  border-style: hidden;
+  width: 100%;
+  border: 0.1rem solid rgba(18, 18, 18, 0.2);
 }
 
-
 .swatchContentDetails .titleActiveSwatch {
-    font-size: 20px;
-    font-weight: 400;
-    margin-right: 30px;
+  font-size: 20px;
+  font-weight: 400;
+  margin-right: 30px;
 }
 
 .swatchModelMetaDetails td {
-    border: 0.1rem solid rgba(18,18,18,0.2);
-    padding: 0.5rem 1.5rem;
-    
+  border: 0.1rem solid rgba(18, 18, 18, 0.2);
+  padding: 0.5rem 1.5rem;
 }
-
 
 .swatchMetaHeading {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
-
-
-.swatchMetaValue{
-    text-transform: capitalize;
+.swatchMetaValue {
+  text-transform: capitalize;
 }
 
-.btAddToSwatcjed, .text_btn_lg {
-    text-align: center;
-    border: 1px solid rgba(18,18,18,0.5);
-    padding: 10px 20px;
-    margin-top: 50px;
-    cursor: pointer;
-    transition: all .5s ease-in-out;
-    user-select: none;
-    background-color: #000000;
-    color: #fff;
-    position: relative;
-    font-size: 12px;
-    appearance: button;
-    transform-origin: center;
+.btAddToSwatcjed,
+.text_btn_lg {
+  text-align: center;
+  border: 1px solid rgba(18, 18, 18, 0.5);
+  padding: 10px 20px;
+  margin-top: 50px;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  user-select: none;
+  background-color: #000000;
+  color: #fff;
+  position: relative;
+  font-size: 12px;
+  appearance: button;
+  transform-origin: center;
 }
 
 @keyframes shine {
-    
-    to {
-        left: 100%;
-    }
-
-
+  to {
+    left: 100%;
   }
+}
 
-  
-.flashButtonWrapper {overflow: hidden;}
+.flashButtonWrapper {
+  overflow: hidden;
+}
 
-.btAddToSwatcjed:after, .text_btn_lg:after
-{
-    content: "";
-    z-index: 1;
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    transform: skew(-15deg);
-    background-image: linear-gradient(90deg,transparent,rgba(255, 255, 255,.25),transparent);
-    overflow: hidden;
-    /*
+.btAddToSwatcjed:after,
+.text_btn_lg:after {
+  content: "";
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transform: skew(-15deg);
+  background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  overflow: hidden;
+  /*
     border: 1px solid red;
     */
-    
-    
 }
 
-.text_btn_lg:hover:after, .btAddToSwatcjed:hover:after  {
-    animation: shine 1s ease;
-    z-index: 1;
+.text_btn_lg:hover:after,
+.btAddToSwatcjed:hover:after {
+  animation: shine 1s ease;
+  z-index: 1;
 }
 
-.btAddToSwatcjed:hover, .text_btn_lg:hover { 
-    color: #fff;
-    box-shadow: none;
-    background-color: rgba(0,0,0.65);
-    transition-delay: .25s;
+.btAddToSwatcjed:hover,
+.text_btn_lg:hover {
+  color: #fff;
+  box-shadow: none;
+  background-color: rgba(0, 0, 0.65);
+  transition-delay: 0.25s;
 }
 
-
-.btAddToSwatcjed:active, .text_btn_lg:active {
-    transform: scale(0.50);
-    
-  }
-
+.btAddToSwatcjed:active,
+.text_btn_lg:active {
+  transform: scale(0.5);
+}
 
 .selectedSwatch_item {
-    display: flex;
-    align-items: center;
-    
-    border-bottom: 1px solid rgba(213,201,201,0.25);
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    opacity: 0;
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1px solid rgba(213, 201, 201, 0.25);
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  opacity: 0;
 }
 
-
 .selectedSwatch_item .swatch_thumb {
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 }
 
 .selectedSwatch_item .swatch_thumb img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    object-position: center;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .selectedSwatchItemWrap {
-    /*
+  /*
     transition: all 1s ease-in-out;
     */
 }
 
 @keyframes fadeSlideIn {
-    from {
-     
-      opacity: 0;
-      transform: translate3d(-50px,0,0); /* Start off-screen to the left */
-    }
-    to {
-      opacity: 1;
-      transform: translate3d(0,0,0); /* Move to the original position */
-    }
+  from {
+    opacity: 0;
+    transform: translate3d(-50px, 0, 0); /* Start off-screen to the left */
   }
-
-  @keyframes fadeSlideOut {
-    from {
-      opacity: 1;
-      transform: translate3d(0,0,0); /* Move to the original position */
-    }
-    to {
-      opacity: 0;
-      transform: translate3d(50px,0,0); /* Start off-screen to the left */
-    }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0); /* Move to the original position */
   }
+}
 
+@keyframes fadeSlideOut {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0); /* Move to the original position */
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(50px, 0, 0); /* Start off-screen to the left */
+  }
+}
 
 .selectedSwatch_item.slide-in {
-
-    animation: fadeSlideIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-    animation-delay: 0.1s; /* Add a 0.5s delay */
-    
+  animation: fadeSlideIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+  animation-delay: 0.1s; /* Add a 0.5s delay */
 }
 
 .selectedSwatch_item.slide-out {
-    animation: fadeSlideOut 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-    
+  animation: fadeSlideOut 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
 .swatchTitle_selected {
-
-    font-size: 13px;
-    padding: 5px 10px;
-    color: rgba(18,18,18,0.75);
-    user-select: none;
-    flex: 1;
-    
+  font-size: 13px;
+  padding: 5px 10px;
+  color: rgba(18, 18, 18, 0.75);
+  user-select: none;
+  flex: 1;
 }
 
 .selectedSwatch_item .removeSwatchControl {
-    background-color: #ffadad66;
-    border-radius: 25px;
-    cursor: pointer;
-    appearance: button;
-    padding: 3px;
-    background: #8888881a;
-    border-radius: 50%;
-    height: 18px;
-    width: 18px;
-    transition: .5s ease-in-out all;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: #ffadad66;
+  border-radius: 25px;
+  cursor: pointer;
+  appearance: button;
+  padding: 3px;
+  background: #8888881a;
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  transition: 0.5s ease-in-out all;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .selectedSwatch_item .removeSwatchControl:hover {
-    background-color: #ffadad66;
+  background-color: #ffadad66;
 }
 
-.selectedSwatch_item .removeSwatchControl .icon-close{ 
-    background: #8888881a;
-    border-radius: 50%;
-    height: 10px;
-    width: 10px;
-    transition: .5s ease-in-out all;
-
+.selectedSwatch_item .removeSwatchControl .icon-close {
+  background: #8888881a;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  transition: 0.5s ease-in-out all;
 }
-    
 
 .stickySelectionSection {
-    position: sticky;
-    top: 0px;
-    bottom: 0;
-    
+  position: sticky;
+  top: 0px;
+  bottom: 0;
 }
 
 .makeRequestBlock {
-width: 100%;
+  width: 100%;
 }
 
 .requestSwatchEmailInput {
-
-    font-size: 16px;
-    color: rgba(18,18,18,0.75);
-    display: inline-block;
-    width: 100%;
-    box-shadow: none;
-    outline: none;
-    border: 1px solid rgba(18,18,18,0.5);
-    max-width: 100%;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    margin-right: -5px;
+  font-size: 16px;
+  color: rgba(18, 18, 18, 0.75);
+  display: inline-block;
+  width: 100%;
+  box-shadow: none;
+  outline: none;
+  border: 1px solid rgba(18, 18, 18, 0.5);
+  max-width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: -5px;
 }
 
 .text__color_lightGrey {
-    color: rgba(18,18,18,0.75);
+  color: rgba(18, 18, 18, 0.75);
 }
 
 .text__size_sm {
-    font-size: 15px;
+  font-size: 15px;
 }
 
 .postSwatchSentBlock {
-    color: rgb(14, 65, 14);
+  color: rgb(14, 65, 14);
 }
 
 .sourceItemList > div {
-    
-    cursor: pointer;
-    margin-bottom: 10px;
-    padding-left: 10px;
-    user-select: none;
-    text-transform: uppercase;
-    font-size: 12px;
-    color: rgba(18,18,18,0.45);
-    transition: all .3s ease-in-out;
-    
-
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  user-select: none;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: rgba(18, 18, 18, 0.45);
+  transition: all 0.3s ease-in-out;
 }
 
-.sourceItemList > div.active { 
-    
-    color: rgba(18,18,18,0.75);
-    position: relative;
-
+.sourceItemList > div.active {
+  color: rgba(18, 18, 18, 0.75);
+  position: relative;
 }
 .sourceItemList > div:not(.active):hover {
-    
-    color: rgba(18,18,18,0.75);
+  color: rgba(18, 18, 18, 0.75);
 }
 
 .sourceItemList > div.active:before {
-      
-    content: '\2713';
-    position: absolute;
-    left: -5px;
-    top: 0;
-
+  content: "\2713";
+  position: absolute;
+  left: -5px;
+  top: 0;
 }
 
 .filter-labels h5 {
-    margin-top: 30px;
-    margin-bottom: 5px;
-    font-weight: 400;
-    text-transform: capitalize;
+  margin-top: 30px;
+  margin-bottom: 5px;
+  font-weight: 400;
+  text-transform: capitalize;
 }
 
 .swatchCounter {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
-.swatchCounter .clearAll-wrap{
-    color: #ff0202c7;
-    font-size: 14px;
-    display: inline-block;
-    padding-bottom: 0px;
-    border-bottom: 1px solid #ff0202c7;
-    cursor: pointer;
+.swatchCounter .clearAll-wrap {
+  color: #ff0202c7;
+  font-size: 14px;
+  display: inline-block;
+  padding-bottom: 0px;
+  border-bottom: 1px solid #ff0202c7;
+  cursor: pointer;
 }
 
 .no-records {
-    
-    color: rgb(209, 25, 25);
-    text-align: center;
-    padding: 20px 30px;
-    font-size: 20px;
-    transform: translateY(20vh);
-    font-weight: 500;
+  color: rgb(209, 25, 25);
+  text-align: center;
+  padding: 20px 30px;
+  font-size: 20px;
+  transform: translateY(20vh);
+  font-weight: 500;
 }

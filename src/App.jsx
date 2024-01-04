@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SwatchesColumn from "./components/swatches/SwatchesSelected.jsx";
-import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams } from "./utils/helpers.js";
+import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey } from "./utils/helpers.js";
 import SwatchModel from "./components/models/SwatchModel.jsx";
 
 import Select from "react-select";
@@ -64,12 +64,18 @@ function App() {
   };
 
   const handleSource = (e, source) => {
+    setSelectedFilters([]);
+
     e.preventDefault();
     var matchedSource = swatchSources.findIndex((item) => item.url == source);
     console.log(matchedSource);
+
     setsSatches_request_url((existingUrl) => {
       let clearedUrl = clearAllQueryParams(existingUrl);
-      return updateQueryStringParameter(clearedUrl, "source", source);
+      console.log("cleared url from handlesouce change", clearedUrl);
+      const appliedUrl = updateQueryStringParameter(clearedUrl, "source", source);
+      console.log("applied url", appliedUrl);
+      return appliedUrl;
     });
 
     setSwatchSources((prevSources) => {
@@ -84,8 +90,6 @@ function App() {
   };
 
   const prepareFilters = (filterName, filterValue) => {
-    if (filterName === "COLOUR") filterName = "colors";
-
     const filterIndex = selectedFilters.findIndex((filter) => filter.filterHeader === filterName);
 
     const updatedFilters = (prevFilters) => {
@@ -106,9 +110,16 @@ function App() {
   };
 
   const applyFilters = () => {
+    console.log("apply filter is called");
+
     let filterCopy = [...selectedFilters];
 
     setsSatches_request_url((existingUrl) => {
+      let appendurlSourceAsFilterValue = { filterHeader: "source", values: [listMeta.source] };
+      let filteringActivate = { filterHeader: "filteringActivate", values: ["on"] };
+
+      filterCopy.push(appendurlSourceAsFilterValue, filteringActivate);
+
       let clearedUrl = clearAllQueryParams(existingUrl);
       return buildFiltersUrlQueryParams(clearedUrl, filterCopy);
     });
