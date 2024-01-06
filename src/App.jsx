@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import SwatchesColumn from "./components/swatches/SwatchesSelected.jsx";
 import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey, urlHaskey } from "./utils/helpers.js";
 import SwatchModel from "./components/models/SwatchModel.jsx";
-
 import RemoveSVG from "./components/RemoveSVG.jsx";
-
 import Select from "react-select";
-
 import "./App.css";
+import Loader from "./components/loader.jsx";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -199,6 +197,7 @@ function App() {
       const response = await request.json();
       if (response.filters != undefined) {
         setFilters(response.filters);
+        setLoading(false);
       }
 
       setListMeta(response.meta);
@@ -223,7 +222,6 @@ function App() {
 
         setPages((oldpages) => generatedPagesArray);
       }
-      setLoading(false);
     })();
 
     localStorage.setItem("swatches_request_url", swatches_request_url);
@@ -374,7 +372,9 @@ function App() {
                 ))
               ) : (
                 <div className="swatchGridLoadingItem">
-                  <div>loading...</div>
+                  <div>
+                    <Loader />
+                  </div>
                 </div>
               )}
             </div>
