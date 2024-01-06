@@ -4,6 +4,16 @@ function generateNumberArray(size) {
   return Array.from({ length: size }, (_, index) => index + 1);
 }
 
+function urlHaskey(url, key) {
+  const urlObject = new URL(url);
+  const queryParams = new URLSearchParams(urlObject.search);
+
+  if (queryParams.has(key)) {
+    return queryParams.get(key);
+  }
+  false;
+}
+
 function updateQueryStringParameter(url, key, value) {
   const urlObject = new URL(url);
   const queryParams = new URLSearchParams(urlObject.search);
@@ -52,4 +62,4 @@ const validateEmail = (email) => {
     .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 };
 
-export { validateEmail, generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey };
+export { validateEmail, generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey, urlHaskey };

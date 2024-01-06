@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import SwatchesColumn from "./components/swatches/SwatchesSelected.jsx";
-import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey } from "./utils/helpers.js";
+import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey, urlHaskey } from "./utils/helpers.js";
 import SwatchModel from "./components/models/SwatchModel.jsx";
+
+import RemoveSVG from "./components/RemoveSVG.jsx";
 
 import Select from "react-select";
 
@@ -30,6 +32,23 @@ function App() {
   const [swatchModelItem, setSwatchModelItem] = useState(null);
   const [selectedSwatches, setSelectedSwatches] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [haveFilters, setHaveFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    // Add or remove the class based on the modalActive state
+
+    if (swatchModelActive) {
+      document.body.classList.add("menu-mobile--open");
+    } else {
+      document.body.classList.remove("menu-mobile--open");
+    }
+
+    // Cleanup the class when the component is unmounted
+    return () => {
+      document.body.classList.remove("menu-mobile--open");
+    };
+  }, [swatchModelActive]);
 
   const standaAloneAddSwatchHelperUpdate = (swatchItemToAdd) => {
     setSelectedSwatches((existingSwatches) => {
@@ -61,6 +80,18 @@ function App() {
   const handlePaginate = (e, pageNo) => {
     e.preventDefault();
     setsSatches_request_url((existingUrl) => updateQueryStringParameter(existingUrl, "page", pageNo));
+  };
+
+  const clearAllFilters = () => {
+    setsSatches_request_url((existingUrl) => {
+      let source = listMeta.source;
+
+      let clearedUrl = clearAllQueryParams(existingUrl);
+
+      const appliedUrl = updateQueryStringParameter(clearedUrl, "source", source);
+
+      return appliedUrl;
+    });
   };
 
   const handleSource = (e, source) => {
@@ -196,6 +227,10 @@ function App() {
     })();
 
     localStorage.setItem("swatches_request_url", swatches_request_url);
+
+    let isFilterACtive = !!urlHaskey(swatches_request_url, "filteringActivate");
+
+    setHaveFilters(isFilterACtive);
   }, [swatches_request_url]);
 
   return (
@@ -203,123 +238,128 @@ function App() {
       <div className="clotAppWrap">
         {swatchModelActive && <SwatchModel swatchModelItem={swatchModelItem} closeSwatchModel={closeSwatchModel} onSwatchAdd={handleSwatchAdd} />}
 
-        <div className="swatchPagination">
-          <ul>
-            {pages.length > 1 &&
-              pages.map((pageNO, pageIndex) => (
-                <li key={pageIndex}>
-                  <a href="#" onClick={(e) => handlePaginate(e, pageNO)}>
-                    {pageNO}
-                  </a>
-                </li>
-              ))}
-          </ul>
-        </div>
-
         <div className="clothSwatchColWrap">
           <div className="swatchFilter box-border">
-            <h2>Matched Items : ( {listMeta.total} )</h2>
-
-            <div>
-              <h3>Source</h3>
-
-              <div className="sourceItemList">
-                {swatchSources.map((source) => (
-                  <div className={`source-item ${source.active ? "active" : ""}`} onClick={(e) => handleSource(e, source.url)}>
-                    {source.name}
-                  </div>
-                ))}
+            <div>Matched Items : ( {listMeta.total} )</div>
+            <h4 className="filter-heading-control">
+              Filter By
+              <div className="show-mobile" style={{ fontSize: "14px" }} onClick={() => setShowFilters(!showFilters)}>
+                {!showFilters ? "\u25BC" : "\u25B2"}{" "}
               </div>
-            </div>
+            </h4>
 
-            <div className="swatch_apply_filters">
-              <div className="flashButtonWrapper">
-                <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>
-                  APPLY FILTERS
+            <div className={`filter-mobile-toggle ${!showFilters ? "mobile-hide" : ""}`}>
+              <div>
+                <h4>Collections</h4>
+                <div className="sourceItemList">
+                  {swatchSources.map((source) => (
+                    <div className={`source-item ${source.active ? "active" : ""}`} onClick={(e) => handleSource(e, source.url)}>
+                      {source.name}
+                    </div>
+                  ))}
                 </div>
               </div>
+
+              <div className="swatch_apply_filters">
+                <div className="flashButtonWrapper">
+                  <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>
+                    APPLY FILTERS
+                  </div>
+                </div>
+
+                {haveFilters && (
+                  <div className="clearFilterBT_wrap" onClick={clearAllFilters}>
+                    <div className="clearOutlineBtFilter">
+                      <div className="filerBTtext">clear</div>
+                      <RemoveSVG />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {filters.length > 0 && listMeta.source == "foxflannel.com" && (
+                <div className="filter-labels">
+                  {filters.map((filter, filterIndex) => (
+                    <div key={filterIndex}>
+                      <h5>{filter.name.toLowerCase()}</h5>
+                      <Select
+                        isMulti
+                        options={filter.items.map((item, itemIndex) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        onChange={(selectedOptions) => {
+                          prepareFilters(filter.name, selectedOptions);
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {filters.length > 0 && listMeta.source == "loropiana.com" && (
+                <div className="filter-labels">
+                  {filters.map((filter, filterIndex) => (
+                    <div key={filterIndex}>
+                      <h5>{filter.name.toLowerCase()}</h5>
+                      <Select
+                        isMulti
+                        options={filter.items.map((item, itemIndex) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        onChange={(selectedOptions) => {
+                          prepareFilters(filter.name, selectedOptions);
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {filters.length > 0 && listMeta.source == "shop.dugdalebros.com" && (
+                <div className="filter-labels">
+                  {filters.map((filter, filterIndex) => (
+                    <div key={filterIndex}>
+                      <h5>{filter.name.toLowerCase()}</h5>
+                      <Select
+                        isMulti
+                        options={filter.items.map((item, itemIndex) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        onChange={(selectedOptions) => {
+                          prepareFilters(filter.name, selectedOptions);
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              {filters.length > 0 && listMeta.source == "harrisons1863.com" && (
+                <div className="filter-labels">
+                  {filters.map((filter, filterIndex) => (
+                    <div key={filterIndex}>
+                      <h5>{filter.name.toLowerCase()}</h5>
+                      <Select
+                        isMulti
+                        options={filter.items.map((item, itemIndex) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                        onChange={(selectedOptions) => {
+                          prepareFilters(filter.name, selectedOptions);
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-
-            <h2>Filter By</h2>
-            {filters.length > 0 && listMeta.source == "foxflannel.com" && (
-              <div className="filter-labels">
-                {filters.map((filter, filterIndex) => (
-                  <div key={filterIndex}>
-                    <h5>{filter.name.toLowerCase()}</h5>
-                    <Select
-                      isMulti
-                      options={filter.items.map((item, itemIndex) => ({
-                        value: item,
-                        label: item,
-                      }))}
-                      onChange={(selectedOptions) => {
-                        prepareFilters(filter.name, selectedOptions);
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {filters.length > 0 && listMeta.source == "loropiana.com" && (
-              <div className="filter-labels">
-                {filters.map((filter, filterIndex) => (
-                  <div key={filterIndex}>
-                    <h5>{filter.name.toLowerCase()}</h5>
-                    <Select
-                      isMulti
-                      options={filter.items.map((item, itemIndex) => ({
-                        value: item,
-                        label: item,
-                      }))}
-                      onChange={(selectedOptions) => {
-                        prepareFilters(filter.name, selectedOptions);
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {filters.length > 0 && listMeta.source == "shop.dugdalebros.com" && (
-              <div className="filter-labels">
-                {filters.map((filter, filterIndex) => (
-                  <div key={filterIndex}>
-                    <h5>{filter.name.toLowerCase()}</h5>
-                    <Select
-                      isMulti
-                      options={filter.items.map((item, itemIndex) => ({
-                        value: item,
-                        label: item,
-                      }))}
-                      onChange={(selectedOptions) => {
-                        prepareFilters(filter.name, selectedOptions);
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-            {filters.length > 0 && listMeta.source == "harrisons1863.com" && (
-              <div className="filter-labels">
-                {filters.map((filter, filterIndex) => (
-                  <div key={filterIndex}>
-                    <h5>{filter.name.toLowerCase()}</h5>
-                    <Select
-                      isMulti
-                      options={filter.items.map((item, itemIndex) => ({
-                        value: item,
-                        label: item,
-                      }))}
-                      onChange={(selectedOptions) => {
-                        prepareFilters(filter.name, selectedOptions);
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
+
+          <SwatchesColumn selectedSwatches={selectedSwatches} removeSelectedSwatch={removeSelectedSwatch} removeAllSwatches={removeAllSwatches} />
+
           <div className="swatchListings box-border">
             <div className={`swatchItemListing ${!loading ? "loaded-grid" : "pending-grid"}`}>
               {!loading ? (
@@ -341,8 +381,18 @@ function App() {
 
             {!loading && swatchListings.length == 0 && <div className="no-records">No records were found in matching criteria!</div>}
           </div>
-
-          <SwatchesColumn selectedSwatches={selectedSwatches} removeSelectedSwatch={removeSelectedSwatch} removeAllSwatches={removeAllSwatches} />
+        </div>
+        <div className="swatchPagination">
+          <ul>
+            {pages.length > 1 &&
+              pages.map((pageNO, pageIndex) => (
+                <li key={pageIndex} className={listMeta.page == pageNO ? "active-page" : ""}>
+                  <a href="#" onClick={(e) => handlePaginate(e, pageNO)}>
+                    {pageNO}
+                  </a>
+                </li>
+              ))}
+          </ul>
         </div>
       </div>
     </>

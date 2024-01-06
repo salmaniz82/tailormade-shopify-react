@@ -2,7 +2,7 @@ import { API_BASE_URL } from "../../utils/helpers.js";
 
 function SwatchModel({ swatchModelItem, closeSwatchModel, onSwatchAdd }) {
   return (
-    <div className="swatchModelWrapper">
+    <div className="swatchModelWrapper modal-enter">
       <div className="swatchImageWrapper">
         <img src={`${API_BASE_URL}${swatchModelItem.imageUrl}`} />
       </div>

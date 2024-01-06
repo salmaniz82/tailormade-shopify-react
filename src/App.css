@@ -2,10 +2,24 @@
 
 /*
 font-family: 'Urbanist', sans-serif;
+--font-heading-family
+--font-body-family
 */
 
+:root {
+  --font-heading-family: "Lato", sans-serif;
+  --font-body-family: "Urbanist", sans-serif;
+}
+
 .clotAppWrap {
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-body-family);
+}
+
+.swatchTitle,
+.titleActiveSwatch {
+  /*
+  font-family: var(--font-heading-family);
+  */
 }
 
 .clotAppWrap .banner {
@@ -15,11 +29,14 @@ font-family: 'Urbanist', sans-serif;
 .clothSwatchColWrap {
   max-width: 1560px;
   margin: 0 auto;
-  border: 1px solid blue;
-  padding: 20px 10px;
-  display: flex;
-  flex-wrap: wrap;
+  padding: 20px 10px 50px;
   box-sizing: border-box;
+}
+
+@media (min-width: 800px) {
+  .clothSwatchColWrap {
+    display: flex;
+  }
 }
 
 .swatchFilter,
@@ -35,16 +52,25 @@ font-family: 'Urbanist', sans-serif;
 .selectedSwatches {
   padding-left: 5px;
   border-left: 1px solid #e3e3e3;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.swatchFilter,
-.selectedSwatches {
-  flex: 0 0 250px;
-}
-.swatchListings {
-  flex: 1;
-  padding-left: 5px;
-  padding-right: 5px;
+@media (min-width: 800px) {
+  .swatchListings {
+    flex: 1;
+    padding-left: 5px;
+    padding-right: 5px;
+    order: 2;
+  }
+  .swatchFilter,
+  .selectedSwatches {
+    flex: 0 0 250px;
+  }
+
+  .selectedSwatches {
+    order: 3;
+  }
 }
 
 .box-border {
@@ -53,8 +79,16 @@ font-family: 'Urbanist', sans-serif;
 
 .swatchItemListing.loaded-grid {
   display: grid;
-  gap: 15px;
-  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 800px) {
+  .swatchItemListing.loaded-grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .swatchItemListing.pending-grid {
@@ -79,26 +113,6 @@ font-family: 'Urbanist', sans-serif;
   object-position: center;
 }
 
-.swatchPagination {
-  flex-basis: 100%;
-}
-
-.swatchPagination ul {
-  display: flex;
-  list-style: none;
-  justify-content: center;
-}
-
-.swatchPagination ul li {
-  cursor: pointer;
-  font-size: 20px;
-  padding: 5px;
-}
-
-.swatchPagination ul li a {
-  text-decoration: none;
-}
-
 .clotAppWrap .swatchItem {
   min-width: calc(100% / 4);
   cursor: pointer;
@@ -106,11 +120,6 @@ font-family: 'Urbanist', sans-serif;
   transition: all 0.2s ease-in;
   transform: translate3d(0, 0, 0);
   border-bottom: 1px solid transparent;
-}
-
-.clotAppWrap .swatchItem:hover {
-  transform: translate3d(0, -3px, 0);
-  border-bottom: 1px solid rgb(18, 228, 217);
 }
 
 .itemImage_container.pending-imgLoad {
@@ -154,20 +163,14 @@ font-family: 'Urbanist', sans-serif;
   display: flex;
   max-width: 950px;
   background: #fff;
-  width: 100%;
+  width: calc(100vw - 15px);
   position: fixed;
   z-index: 111;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   flex-direction: row;
-  max-height: 650px;
-  height: 100%;
-  border: 1px solid teal;
-}
-
-.swatchModelWrapper .swatchImageWrapper {
-  flex-basis: 50%;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 }
 
 .swatchModelWrapper .swatchImageWrapper img {
@@ -177,9 +180,31 @@ font-family: 'Urbanist', sans-serif;
   object-position: left center;
 }
 
+@media (min-width: 800px) {
+  .swatchModelWrapper {
+    max-height: 650px;
+    height: 100%;
+  }
+}
+
+@media (max-width: 800px) {
+  .swatchModelWrapper {
+    display: block;
+  }
+
+  .swatchModelWrapper .swatchImageWrapper img {
+    max-height: 300px;
+  }
+}
+
+.swatchModelWrapper .swatchImageWrapper {
+  flex-basis: 50%;
+}
+
 .swatchContentDetails {
   padding: 20px;
   flex: 1;
+  background-color: #ffffff;
 }
 
 .close-button {
@@ -202,7 +227,7 @@ font-family: 'Urbanist', sans-serif;
 }
 
 .swatchModelMetaDetails {
-  margin-top: 50px;
+  margin-top: 20px;
   border-spacing: 0;
   border-collapse: collapse;
   font-size: 0.85rem;
@@ -235,7 +260,6 @@ font-family: 'Urbanist', sans-serif;
   text-align: center;
   border: 1px solid rgba(18, 18, 18, 0.5);
   padding: 10px 20px;
-  margin-top: 50px;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
   user-select: none;
@@ -245,6 +269,16 @@ font-family: 'Urbanist', sans-serif;
   font-size: 12px;
   appearance: button;
   transform-origin: center;
+}
+
+.swatchContentDetails .btAddToSwatcjed {
+  margin-top: 20px;
+}
+
+@media (min-width: 800px) {
+  .swatchContentDetails .btAddToSwatcjed {
+    margin-top: 50px;
+  }
 }
 
 @keyframes shine {
@@ -296,12 +330,19 @@ font-family: 'Urbanist', sans-serif;
 .selectedSwatch_item {
   display: flex;
   align-items: center;
-
-  border-bottom: 1px solid rgba(213, 201, 201, 0.25);
   margin-bottom: 10px;
   margin-top: 10px;
   padding-bottom: 10px;
-  opacity: 0;
+}
+
+@media (min-width: 800px) {
+  .selectedSwatch_item {
+    opacity: 0;
+  }
+}
+
+.selectedSwatch_item:not(:last-child) {
+  border-bottom: 1px solid rgba(213, 201, 201, 0.45);
 }
 
 .selectedSwatch_item .swatch_thumb {
@@ -344,13 +385,15 @@ font-family: 'Urbanist', sans-serif;
   }
 }
 
-.selectedSwatch_item.slide-in {
-  animation: fadeSlideIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-  animation-delay: 0.1s; /* Add a 0.5s delay */
-}
+@media (min-width: 800px) {
+  .selectedSwatch_item.slide-in {
+    animation: fadeSlideIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    animation-delay: 0.1s; /* Add a 0.5s delay */
+  }
 
-.selectedSwatch_item.slide-out {
-  animation: fadeSlideOut 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+  .selectedSwatch_item.slide-out {
+    animation: fadeSlideOut 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+  }
 }
 
 .swatchTitle_selected {
@@ -479,4 +522,160 @@ font-family: 'Urbanist', sans-serif;
   font-size: 20px;
   transform: translateY(20vh);
   font-weight: 500;
+}
+
+.swatchPagination {
+  flex-basis: 100%;
+}
+
+.swatchPagination {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.swatchPagination ul {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  gap: 2px;
+  padding-left: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.swatchPagination ul li {
+  cursor: pointer;
+}
+
+.swatchPagination ul li a {
+  text-decoration: none;
+}
+
+.swatchPagination ul li a {
+  text-decoration: none;
+  color: rgba(18, 18, 18, 0.5);
+  font-size: 14px;
+  display: inline-block;
+  border: 1px solid transparent;
+  width: 20px;
+  text-align: center;
+  transition: all 0.3s ease-in;
+}
+
+.swatchPagination ul li:not(.active-page):hover a {
+  background-color: rgba(18, 18, 18, 0.1);
+  color: #fff;
+}
+
+.swatchPagination ul li.active-page a {
+  background-color: #333;
+  color: #fff;
+}
+
+@keyframes fadeInAndScale {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.modal-enter {
+  animation: fadeInAndScale 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+.swatch-toggle {
+  display: none;
+}
+
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .swatch-toggle {
+    display: inline-block;
+  }
+
+  .show-mobile {
+    display: block;
+  }
+
+  .hide-mobile,
+  .mobile-hide {
+    display: none;
+  }
+
+  .hide-swatches {
+    display: none;
+  }
+
+  .show-swatches {
+    display: block;
+  }
+}
+
+.swatch_apply_filters {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.swatch_apply_filters > div:first-child {
+  flex-basis: 100%;
+}
+
+.swatch_apply_filters > div:nth-child(2) {
+  flex-basis: 20%;
+}
+
+.clearOutlineBtFilter {
+  display: flex;
+  border: 1px solid rgba(18, 18, 18, 0.65);
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.clearOutlineBtFilter svg {
+  width: 14px;
+  height: auto;
+}
+
+.filter-heading-control {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter-heading-control > div {
+  flex-basis: 50px;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .filter-heading-control {
+    border-bottom: 1px solid rgba(18, 18, 18, 0.35);
+    padding-bottom: 10px;
+  }
+
+  .clothSwatchColWrap {
+    padding-top: 150px;
+  }
+
+  .swatchFilter {
+    position: sticky;
+    top: 72px;
+    background-color: #fff;
+    z-index: 99;
+    width: 100%;
+  }
 }
