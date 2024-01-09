@@ -1,14 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400&family=Urbanist&display=swap");
-
-/*
-font-family: 'Urbanist', sans-serif;
---font-heading-family
---font-body-family
-*/
-
-:root {
-  --font-heading-family: "Lato", sans-serif;
-  --font-body-family: "Urbanist", sans-serif;
+.page-container {
+  overflow: unset !important;
+  position: unset !important;
+  -webkit-transform: unset !important;
+  transform: unset !important;
 }
 
 .clotAppWrap {
@@ -105,14 +99,6 @@ font-family: 'Urbanist', sans-serif;
   flex-direction: column;
 }
 
-.swatchItem img {
-  max-width: 100%;
-  height: 100%;
-  object-fit: cover;
-  aspect-ratio: 2 /2.2;
-  object-position: center;
-}
-
 .clotAppWrap .swatchItem {
   min-width: calc(100% / 4);
   cursor: pointer;
@@ -133,12 +119,35 @@ font-family: 'Urbanist', sans-serif;
   transition: 0.25s ease-in-out all;
 }
 
+.swatchItem img {
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 2 /2.2;
+  object-position: center;
+}
+
 .itemImage_container > img {
   transition: opacity 0.3s ease-in;
 }
 
 .itemImage_container.pending-imgLoad img {
   opacity: 0;
+}
+
+@media (max-width: 800px) {
+  .itemImage_container.pending-imgLoad {
+    height: calc((100vw / 2) + 10px);
+  }
+
+  .itemImage_container {
+    height: calc((100vw / 2) + 10px);
+  }
+
+  .itemImage_container img {
+    height: 100% !important;
+    width: 100% !important;
+  }
 }
 
 @keyframes shimmer {
@@ -193,7 +202,7 @@ font-family: 'Urbanist', sans-serif;
   }
 
   .swatchModelWrapper .swatchImageWrapper img {
-    max-height: 300px;
+    max-height: 250px;
   }
 }
 
@@ -526,20 +535,33 @@ font-family: 'Urbanist', sans-serif;
 
 .swatchPagination {
   flex-basis: 100%;
+  margin-bottom: 10px;
 }
 
-.swatchPagination {
-  position: fixed;
-  bottom: 0;
+@media (min-width: 800px) {
+  .swatchPagination {
+    margin-top: -34px;
+  }
+}
+
+@media (max-width: 800px) {
+  .swatchPagination {
+    position: sticky;
+    top: 123px;
+    bottom: 0;
+    /*
   left: 50%;
   transform: translateX(-50%);
+    */
+    z-index: 10;
+  }
 }
 
 .swatchPagination ul {
   display: flex;
   list-style: none;
   justify-content: center;
-  gap: 2px;
+  gap: 0px;
   padding-left: 0;
   background-color: rgba(255, 255, 255, 0.3);
 }
@@ -555,10 +577,11 @@ font-family: 'Urbanist', sans-serif;
 .swatchPagination ul li a {
   text-decoration: none;
   color: rgba(18, 18, 18, 0.5);
-  font-size: 14px;
-  display: inline-block;
+  font-size: 16px;
+  display: block;
   border: 1px solid transparent;
-  width: 20px;
+  width: 24px;
+  height: 24px;
   text-align: center;
   transition: all 0.3s ease-in;
 }
@@ -694,7 +717,7 @@ font-family: 'Urbanist', sans-serif;
 }
 
 .path {
-  stroke: rgba(196, 31, 218, 0.5);
+  stroke: rgba(18, 18, 18, 0.5);
   stroke-linecap: round;
   animation: dash 1.5s ease-in-out infinite;
 }
@@ -717,5 +740,11 @@ font-family: 'Urbanist', sans-serif;
   100% {
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -124;
+  }
+}
+
+@media (max-width: 800px) {
+  .selectedSwatches {
+    display: none;
   }
 }

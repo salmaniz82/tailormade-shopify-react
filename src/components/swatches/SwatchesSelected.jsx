@@ -74,7 +74,7 @@ function SwatchesSelected({ selectedSwatches, removeSelectedSwatch, removeAllSwa
               </div>
             </>
           ) : (
-            <p style={{ textTransform: "uppercase" }}> Add Your Favorites Swatches </p>
+            <p style={{ textTransform: "uppercase", fontSize: "14px" }}> Explore Favorites Swatches </p>
           )}
         </div>
 

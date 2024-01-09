@@ -4,7 +4,7 @@ function SwatchModel({ swatchModelItem, closeSwatchModel, onSwatchAdd }) {
   return (
     <div className="swatchModelWrapper modal-enter">
       <div className="swatchImageWrapper">
-        <img src={`${API_BASE_URL}${swatchModelItem.imageUrl}`} />
+        <img src={`${API_BASE_URL}${swatchModelItem.thumbnail}`} />
       </div>
 
       <div className="swatchContentDetails">
@@ -29,12 +29,13 @@ function SwatchModel({ swatchModelItem, closeSwatchModel, onSwatchAdd }) {
             </tbody>
           </table>
         </div>
-
-        <div className="flashButtonWrapper">
-          <div className="btAddToSwatcjed" onClick={(event) => onSwatchAdd(swatchModelItem)}>
-            ADD TO SWATCH
+        {false && (
+          <div className="flashButtonWrapper">
+            <div className="btAddToSwatcjed" onClick={(event) => onSwatchAdd(swatchModelItem)}>
+              ADD TO SWATCH
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

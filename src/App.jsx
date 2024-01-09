@@ -359,12 +359,25 @@ function App() {
           <SwatchesColumn selectedSwatches={selectedSwatches} removeSelectedSwatch={removeSelectedSwatch} removeAllSwatches={removeAllSwatches} />
 
           <div className="swatchListings box-border">
+            <div className="swatchPagination">
+              <ul>
+                {pages.length > 1 &&
+                  pages.map((pageNO, pageIndex) => (
+                    <li key={pageIndex} className={listMeta.page == pageNO ? "active-page" : ""}>
+                      <a href="#" onClick={(e) => handlePaginate(e, pageNO)}>
+                        {pageNO}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+
             <div className={`swatchItemListing ${!loading ? "loaded-grid" : "pending-grid"}`}>
               {!loading ? (
                 swatchListings.map((item) => (
                   <div key={item.id} className="swatchItem" onClick={(event) => openSwatchModel(event, item)}>
                     <div className={`itemImage_container ${loadedImages[item.id] ? "loaded-react" : "pending-imgLoad"}`}>
-                      <img src={`${API_BASE_URL}${item.imageUrl}`} alt={item.title + "image"} loading="lazy" onLoad={(e) => handleImageLoad(item.id, e)} />
+                      <img src={`${API_BASE_URL}${item.thumbnail}`} alt={item.title + "image"} loading="lazy" onLoad={(e) => handleImageLoad(item.id, e)} />
                     </div>
 
                     <div className="swatchTitle">{item.title}</div>
@@ -381,18 +394,6 @@ function App() {
 
             {!loading && swatchListings.length == 0 && <div className="no-records">No records were found in matching criteria!</div>}
           </div>
-        </div>
-        <div className="swatchPagination">
-          <ul>
-            {pages.length > 1 &&
-              pages.map((pageNO, pageIndex) => (
-                <li key={pageIndex} className={listMeta.page == pageNO ? "active-page" : ""}>
-                  <a href="#" onClick={(e) => handlePaginate(e, pageNO)}>
-                    {pageNO}
-                  </a>
-                </li>
-              ))}
-          </ul>
         </div>
       </div>
     </>
