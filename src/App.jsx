@@ -3,7 +3,9 @@ import SwatchesColumn from "./components/swatches/SwatchesSelected.jsx";
 import { generateNumberArray, updateQueryStringParameter, clearAllQueryParams, API_BASE_URL, buildFiltersUrlQueryParams, getUrlParamValueByKey, urlHaskey } from "./utils/helpers.js";
 import SwatchModel from "./components/models/SwatchModel.jsx";
 import RemoveSVG from "./components/RemoveSVG.jsx";
-import Select from "react-select";
+import SelectFilters from "./components/filter/SelectFilters.jsx";
+import AccordianFilters from "./components/filter/AccordianFilters.jsx";
+
 import "./App.css";
 import Loader from "./components/loader.jsx";
 
@@ -119,6 +121,7 @@ function App() {
   };
 
   const prepareFilters = (filterName, filterValue) => {
+    return false;
     const filterIndex = selectedFilters.findIndex((filter) => filter.filterHeader === filterName);
 
     const updatedFilters = (prevFilters) => {
@@ -275,84 +278,9 @@ function App() {
                 )}
               </div>
 
-              {filters.length > 0 && listMeta.source == "foxflannel.com" && (
-                <div className="filter-labels">
-                  {filters.map((filter, filterIndex) => (
-                    <div key={filterIndex}>
-                      <h5>{filter.name.toLowerCase()}</h5>
-                      <Select
-                        isMulti
-                        options={filter.items.map((item, itemIndex) => ({
-                          value: item,
-                          label: item,
-                        }))}
-                        onChange={(selectedOptions) => {
-                          prepareFilters(filter.name, selectedOptions);
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/*  <SelectFilters filters={filters} prepareFilters={prepareFilters} />  */}
 
-              {filters.length > 0 && listMeta.source == "loropiana.com" && (
-                <div className="filter-labels">
-                  {filters.map((filter, filterIndex) => (
-                    <div key={filterIndex}>
-                      <h5>{filter.name.toLowerCase()}</h5>
-                      <Select
-                        isMulti
-                        options={filter.items.map((item, itemIndex) => ({
-                          value: item,
-                          label: item,
-                        }))}
-                        onChange={(selectedOptions) => {
-                          prepareFilters(filter.name, selectedOptions);
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {filters.length > 0 && listMeta.source == "shop.dugdalebros.com" && (
-                <div className="filter-labels">
-                  {filters.map((filter, filterIndex) => (
-                    <div key={filterIndex}>
-                      <h5>{filter.name.toLowerCase()}</h5>
-                      <Select
-                        isMulti
-                        options={filter.items.map((item, itemIndex) => ({
-                          value: item,
-                          label: item,
-                        }))}
-                        onChange={(selectedOptions) => {
-                          prepareFilters(filter.name, selectedOptions);
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-              {filters.length > 0 && listMeta.source == "harrisons1863.com" && (
-                <div className="filter-labels">
-                  {filters.map((filter, filterIndex) => (
-                    <div key={filterIndex}>
-                      <h5>{filter.name.toLowerCase()}</h5>
-                      <Select
-                        isMulti
-                        options={filter.items.map((item, itemIndex) => ({
-                          value: item,
-                          label: item,
-                        }))}
-                        onChange={(selectedOptions) => {
-                          prepareFilters(filter.name, selectedOptions);
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+              <AccordianFilters filters={filters} setFilters={setFilters} prepareFilters={prepareFilters} />
             </div>
           </div>
 

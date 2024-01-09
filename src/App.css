@@ -748,3 +748,68 @@
     display: none;
   }
 }
+
+.filter-accordion-header {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ebebeb;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+.filter-accordion-header:after {
+  position: absolute;
+  content: "";
+  background: transparent url(../src/assets/arrow_black_down@2x.kjb8Drre.png) no-repeat right center;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 18px;
+  height: 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+  cursor: pointer;
+  -webkit-transition: inherit;
+  transition: inherit;
+  transition: all 0.3s ease-out;
+}
+
+.filter-accordion-header.active:after {
+  transform: rotate(180deg);
+}
+
+.filter-list-items {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.filter-accordion-header:not(.active) + .filter-list-items {
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.filter-accordion-header:not(.active) + .filter-list-items li {
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-accordion-header + .filter-list-items li {
+  border-bottom: 1px solid transparent;
+  background-color: #f7f7f8;
+  color: #424242;
+  font-size: 14px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  cursor: pointer;
+  user-select: none;
+}
