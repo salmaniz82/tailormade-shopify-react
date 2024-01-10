@@ -233,7 +233,7 @@ function App() {
               <div className="filter-labels">
                 <div>
                   <h5 className={`stock-list filter-accordion-header ${stockAccordian ? "active" : ""} `} onClick={() => setStockAccordian(!stockAccordian)}>
-                    - CHOOSE STOCK COLLECTIONS
+                    - STOCK COLLECTIONS :
                   </h5>
                   <ul className="filter-list-items">
                     {swatchSources.map((source, index) => (
