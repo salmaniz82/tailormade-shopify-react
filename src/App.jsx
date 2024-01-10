@@ -35,6 +35,8 @@ function App() {
   const [haveFilters, setHaveFilters] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
+  const [stockAccordian, setStockAccordian] = useState(false);
+
   useEffect(() => {
     // Add or remove the class based on the modalActive state
 
@@ -83,6 +85,8 @@ function App() {
   };
 
   const clearAllFilters = () => {
+    setSelectedFilters([]);
+
     setsSatches_request_url((existingUrl) => {
       let source = listMeta.source;
 
@@ -118,27 +122,6 @@ function App() {
       });
       return updatedSources;
     });
-  };
-
-  const prepareFilters = (filterName, filterValue) => {
-    return false;
-    const filterIndex = selectedFilters.findIndex((filter) => filter.filterHeader === filterName);
-
-    const updatedFilters = (prevFilters) => {
-      if (filterIndex !== -1) {
-        // Update existing filter
-        const existingFilter = [...prevFilters];
-        existingFilter[filterIndex].values = filterValue.map((value) => value.value);
-        return existingFilter.filter((filter) => filter.values.length > 0); // Filter out empty values
-      } else {
-        // Add new filter
-        return [...prevFilters, { filterHeader: filterName, values: filterValue.map((value) => value.value) }];
-      }
-    };
-
-    setSelectedFilters(updatedFilters);
-
-    console.log(selectedFilters);
   };
 
   const applyFilters = () => {
@@ -190,7 +173,6 @@ function App() {
 
   useEffect(() => {
     console.log("useEffect called detected change in the selectedFilters", selectedFilters);
-    // Filter empty objects after state update
   }, [selectedFilters]);
 
   useEffect(() => {
@@ -243,23 +225,27 @@ function App() {
           <div className="swatchFilter box-border">
             <div>Matched Items : ( {listMeta.total} )</div>
             <h4 className="filter-heading-control">
-              Filter By
-              <div className="show-mobile" style={{ fontSize: "14px" }} onClick={() => setShowFilters(!showFilters)}>
-                {!showFilters ? "\u25BC" : "\u25B2"}{" "}
-              </div>
+              Filters
+              <div className="show-mobile tailor-filter-icon" style={{ fontSize: "14px" }} onClick={() => setShowFilters(!showFilters)}></div>
             </h4>
 
             <div className={`filter-mobile-toggle ${!showFilters ? "mobile-hide" : ""}`}>
-              <div>
-                <h4>Collections</h4>
-                <div className="sourceItemList">
-                  {swatchSources.map((source) => (
-                    <div className={`source-item ${source.active ? "active" : ""}`} onClick={(e) => handleSource(e, source.url)}>
-                      {source.name}
-                    </div>
-                  ))}
+              <div className="filter-labels">
+                <div>
+                  <h5 className={`stock-list filter-accordion-header ${stockAccordian ? "active" : ""} `} onClick={() => setStockAccordian(!stockAccordian)}>
+                    - CHOOSE STOCK COLLECTIONS
+                  </h5>
+                  <ul className="filter-list-items">
+                    {swatchSources.map((source, index) => (
+                      <li key={index} className={`${source.active ? "checkedFilterItem" : ""}`} onClick={(e) => handleSource(e, source.url)}>
+                        {source.name}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
+
+              <AccordianFilters filters={filters} setFilters={setFilters} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
 
               <div className="swatch_apply_filters">
                 <div className="flashButtonWrapper">
@@ -279,8 +265,6 @@ function App() {
               </div>
 
               {/*  <SelectFilters filters={filters} prepareFilters={prepareFilters} />  */}
-
-              <AccordianFilters filters={filters} setFilters={setFilters} prepareFilters={prepareFilters} />
             </div>
           </div>
 

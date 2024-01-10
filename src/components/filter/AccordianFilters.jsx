@@ -1,13 +1,16 @@
 import { useState } from "react";
 
-function AccordianFilters({ filters, setFilters }) {
-  const [chosenFilters, setChosenFilters] = useState([]);
+function AccordianFilters({ filters, setFilters, setSelectedFilters, selectedFilters }) {
+  const [activeFilterHeaders, setActiveFilterHeaders] = useState([]);
 
   const toggleAccordion = function (filterName) {
+    setActiveFilterHeaders((prevActiveFilterHeaders) => {
+      return prevActiveFilterHeaders.includes(filterName) ? prevActiveFilterHeaders.filter((name) => name !== filterName) : [...prevActiveFilterHeaders, filterName];
+    });
+
     setFilters((prevFilters) => {
       return prevFilters.map((filter) => {
         if (filter.name === filterName) {
-          // Toggle the 'active' property for the clicked filter
           return { ...filter, active: !filter.active };
         }
         return filter;
@@ -16,18 +19,14 @@ function AccordianFilters({ filters, setFilters }) {
   };
 
   const chosenListFilters = (filterHeader, item) => {
-    setChosenFilters((prevChosenFilters) => {
-      const existingFilterIndex = prevChosenFilters.findIndex((filter) => filter.filterHeader === filterHeader);
+    setSelectedFilters((prevSelectedFilters) => {
+      const existingFilterIndex = prevSelectedFilters.findIndex((filter) => filter.filterHeader === filterHeader);
 
       if (existingFilterIndex !== -1) {
-        // If filterHeader already exists, check if item exists in values array
-        const existingValues = prevChosenFilters[existingFilterIndex].values;
-        const updatedValues = existingValues.includes(item)
-          ? existingValues.filter((value) => value !== item) // Remove the item if it exists
-          : [...existingValues, item]; // Add the item if it doesn't exist
+        const existingValues = prevSelectedFilters[existingFilterIndex].values;
+        const updatedValues = existingValues.includes(item) ? existingValues.filter((value) => value !== item) : [...existingValues, item];
 
-        // Update the existing filter with the new values
-        const updatedFilters = [...prevChosenFilters];
+        const updatedFilters = [...prevSelectedFilters];
         updatedFilters[existingFilterIndex] = {
           filterHeader,
           values: updatedValues,
@@ -35,8 +34,7 @@ function AccordianFilters({ filters, setFilters }) {
 
         return updatedFilters;
       } else {
-        // If filterHeader doesn't exist, create a new filter
-        return [...prevChosenFilters, { filterHeader, values: [item] }];
+        return [...prevSelectedFilters, { filterHeader, values: [item] }];
       }
     });
   };
@@ -47,7 +45,7 @@ function AccordianFilters({ filters, setFilters }) {
         <div className="filter-labels">
           {filters.map((filter, filterIndex) => (
             <div key={filterIndex}>
-              <h5 className={`filter-accordion-header ${filter.active ? "active" : ""}`} onClick={() => toggleAccordion(filter.name)}>
+              <h5 className={`filter-accordion-header ${activeFilterHeaders.includes(filter.name) ? "active" : ""}`} onClick={() => toggleAccordion(filter.name)}>
                 {filter.name.toLowerCase()}
               </h5>
 
@@ -56,7 +54,7 @@ function AccordianFilters({ filters, setFilters }) {
                   <li
                     key={itemIndex}
                     onClick={() => chosenListFilters(filter.name, item)}
-                    className={`${chosenFilters.some((cf) => cf.filterHeader === filter.name && cf.values.includes(item)) ? "checkedFilterItem" : ""}`}>
+                    className={`${selectedFilters.some((sf) => sf.filterHeader === filter.name && sf.values.includes(item)) ? "checkedFilterItem" : ""}`}>
                     {item}
                   </li>
                 ))}
@@ -65,13 +63,13 @@ function AccordianFilters({ filters, setFilters }) {
           ))}
         </div>
       )}
-      {/* Log the chosen filters state for debugging */}
-      {chosenFilters.length > 0 && (
+      {/* Log the selected filters state for debugging */}
+      {/*selectedFilters.length > 0 && (
         <div>
-          <h5>Chosen Filters:</h5>
-          <pre>{JSON.stringify(chosenFilters, null, 2)}</pre>
+          <h5>Selected Filters:</h5>
+          <pre>{JSON.stringify(selectedFilters, null, 2)}</pre>
         </div>
-      )}
+      )*/}
     </>
   );
 }
