@@ -4,7 +4,7 @@ function SwatchModel({ swatchModelItem, closeSwatchModel, onSwatchAdd }) {
   return (
     <div className="swatchModelWrapper modal-enter">
       <div className="swatchImageWrapper">
-        <img src={`${API_BASE_URL}${swatchModelItem.thumbnail}`} />
+        <img src={`${API_BASE_URL}${swatchModelItem.imageUrl}`} />
       </div>
 
       <div className="swatchContentDetails">
