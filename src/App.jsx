@@ -39,17 +39,7 @@ function App() {
 
   useEffect(() => {
     // Add or remove the class based on the modalActive state
-
-    if (swatchModelActive) {
-      document.body.classList.add("menu-mobile--open");
-    } else {
-      document.body.classList.remove("menu-mobile--open");
-    }
-
     // Cleanup the class when the component is unmounted
-    return () => {
-      document.body.classList.remove("menu-mobile--open");
-    };
   }, [swatchModelActive]);
 
   const standaAloneAddSwatchHelperUpdate = (swatchItemToAdd) => {
@@ -138,6 +128,8 @@ function App() {
       let clearedUrl = clearAllQueryParams(existingUrl);
       return buildFiltersUrlQueryParams(clearedUrl, filterCopy);
     });
+
+    setShowFilters(!showFilters);
   };
 
   const removeFilters = () => {
