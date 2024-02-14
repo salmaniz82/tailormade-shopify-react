@@ -12,15 +12,13 @@ import Loader from "./components/loader.jsx";
 function App() {
   const [loading, setLoading] = useState(true);
 
+  /*
   const storedSwatchesRequestUrl = localStorage.getItem("swatches_request_url");
+  */
+  const storedSwatchesRequestUrl = null;
   const initialSwatchesRequestUrl = storedSwatchesRequestUrl || API_BASE_URL + "swatches";
 
-  const [swatchSources, setSwatchSources] = useState([
-    { name: "foxflannel", url: "foxflannel.com", active: false },
-    { name: "loropiana", url: "loropiana.com", active: false },
-    { name: "dugdalebros", url: "shop.dugdalebros.com", active: false },
-    { name: "harrisons", url: "harrisons1863.com", active: false },
-  ]);
+  const [swatchSources, setSwatchSources] = useState([]);
 
   const [swatches_request_url, setsSatches_request_url] = useState(initialSwatchesRequestUrl);
   const [swatchListings, setSwatchListings] = useState([]);
@@ -163,6 +161,18 @@ function App() {
     setSwatchModelActive(true);
   };
 
+  const indicateActiveSource = (source) => {
+    console.log("indicate source", source);
+
+    console.log("swatch source", swatchSources);
+
+    setSwatchSources((existingSource) => {
+      return existingSource.map((sourceItem) => {
+        return sourceItem.url == source ? { ...sourceItem, active: true } : sourceItem;
+      });
+    });
+  };
+
   useEffect(() => {
     console.log("useEffect called detected change in the selectedFilters", selectedFilters);
   }, [selectedFilters]);
@@ -170,38 +180,46 @@ function App() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const request = await fetch(swatches_request_url);
-      const response = await request.json();
-      if (response.filters != undefined) {
-        setFilters(response.filters);
-        setLoading(false);
-      }
 
-      setListMeta(response.meta);
+      try {
+        const request = await fetch(swatches_request_url);
 
-      const markActiveSwatchSource = (currentState, sourceValue) => {
-        return currentState.map((source) => {
-          if (source.url === sourceValue) {
-            return { ...source, active: true };
-          } else {
-            return { ...source, active: false };
-          }
-        });
-      };
+        if (!request.ok) {
+          const errorBody = request.json();
+          throw new Error(errorBody.message);
+        }
 
-      const updatedSources = markActiveSwatchSource(swatchSources, response.meta.source);
+        const response = await request.json();
+        if (response.filters != undefined) {
+          setFilters(response.filters);
+          setLoading(false);
+        }
 
-      setSwatchSources(updatedSources);
+        setListMeta(response.meta);
 
-      setSwatchListings(response.collections);
-      if (response.meta.pages != undefined) {
-        let generatedPagesArray = generateNumberArray(response.meta.pages);
+        if (swatchSources.length == 0) {
+          setSwatchSources(response.sources);
+        }
 
-        setPages((oldpages) => generatedPagesArray);
-      }
+        if (response.sources != undefined && swatchSources.length == 0) {
+          console.log("setting sources", response.sources);
+          setSwatchSources(response.sources);
+        }
+
+        indicateActiveSource(response.meta.source);
+
+        setSwatchListings(response.collections);
+        if (response.meta.pages != undefined) {
+          let generatedPagesArray = generateNumberArray(response.meta.pages);
+
+          setPages((oldpages) => generatedPagesArray);
+        }
+      } catch (error) {}
     })();
 
+    /*
     localStorage.setItem("swatches_request_url", swatches_request_url);
+    */
 
     let isFilterACtive = !!urlHaskey(swatches_request_url, "filteringActivate");
 
@@ -225,7 +243,7 @@ function App() {
               <div className="filter-labels">
                 <div>
                   <h5 className={`stock-list filter-accordion-header ${stockAccordian ? "active" : ""} `} onClick={() => setStockAccordian(!stockAccordian)}>
-                    - STOCK COLLECTIONS :
+                    - STOCK COLLECTIONS
                   </h5>
                   <ul className="filter-list-items">
                     {swatchSources.map((source, index) => (
@@ -237,26 +255,26 @@ function App() {
                 </div>
               </div>
 
-              <AccordianFilters filters={filters} setFilters={setFilters} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+              {listMeta.source != "all" && <AccordianFilters filters={filters} setFilters={setFilters} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />}
 
-              <div className="swatch_apply_filters">
-                <div className="flashButtonWrapper">
-                  <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>
-                    APPLY FILTERS
-                  </div>
-                </div>
-
-                {haveFilters && (
-                  <div className="clearFilterBT_wrap" onClick={clearAllFilters}>
-                    <div className="clearOutlineBtFilter">
-                      <div className="filerBTtext">clear</div>
-                      <RemoveSVG />
+              {listMeta.source != "all" && (
+                <div className="swatch_apply_filters">
+                  <div className="flashButtonWrapper">
+                    <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>
+                      APPLY FILTERS
                     </div>
                   </div>
-                )}
-              </div>
 
-              {/*  <SelectFilters filters={filters} prepareFilters={prepareFilters} />  */}
+                  {haveFilters && (
+                    <div className="clearFilterBT_wrap" onClick={clearAllFilters}>
+                      <div className="clearOutlineBtFilter">
+                        <div className="filerBTtext">clear</div>
+                        <RemoveSVG />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
