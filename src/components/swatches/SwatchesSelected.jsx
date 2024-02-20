@@ -111,9 +111,11 @@ function SwatchesSelected({ selectedSwatches, removeSelectedSwatch, removeAllSwa
                     </>
                   )}
 
-                  <div className="requestSwatch text_btn_lg" style={{ marginTop: "5px" }}>
-                    REQUEST SWATCH
-                  </div>
+                  {true && (
+                    <div className="requestSwatch text_btn_lg" style={{ marginTop: "5px" }}>
+                      REQUEST SWATCH
+                    </div>
+                  )}
                 </div>
               </div>
             </>

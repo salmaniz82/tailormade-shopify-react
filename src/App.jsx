@@ -240,24 +240,26 @@ function App() {
             </h4>
 
             <div className={`filter-mobile-toggle ${!showFilters ? "mobile-hide" : ""}`}>
-              <div className="filter-labels">
-                <div>
-                  <h5 className={`stock-list filter-accordion-header ${stockAccordian ? "active" : ""} `} onClick={() => setStockAccordian(!stockAccordian)}>
-                    - STOCK COLLECTIONS
-                  </h5>
-                  <ul className="filter-list-items">
-                    {swatchSources.map((source, index) => (
-                      <li key={index} className={`${source.active ? "checkedFilterItem" : ""}`} onClick={(e) => handleSource(e, source.url)}>
-                        {source.name}
-                      </li>
-                    ))}
-                  </ul>
+              {false && (
+                <div className="filter-labels">
+                  <div>
+                    <h5 className={`stock-list filter-accordion-header ${stockAccordian ? "active" : ""} `} onClick={() => setStockAccordian(!stockAccordian)}>
+                      - STOCK COLLECTIONS
+                    </h5>
+                    <ul className="filter-list-items">
+                      {swatchSources.map((source, index) => (
+                        <li key={index} className={`${source.active ? "checkedFilterItem" : ""}`} onClick={(e) => handleSource(e, source.url)}>
+                          {source.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {listMeta.source != "all" && <AccordianFilters filters={filters} setFilters={setFilters} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />}
+              {filters.length > 0 && <AccordianFilters filters={filters} setFilters={setFilters} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />}
 
-              {listMeta.source != "all" && (
+              {true && (
                 <div className="swatch_apply_filters">
                   <div className="flashButtonWrapper">
                     <div className="applyFilterBtn text_btn_lg" onClick={applyFilters}>

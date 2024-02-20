@@ -29,7 +29,7 @@ function SwatchModel({ swatchModelItem, closeSwatchModel, onSwatchAdd }) {
             </tbody>
           </table>
         </div>
-        {false && (
+        {true && (
           <div className="flashButtonWrapper">
             <div className="btAddToSwatcjed" onClick={(event) => onSwatchAdd(swatchModelItem)}>
               ADD TO SWATCH
