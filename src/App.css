@@ -6,7 +6,6 @@
 }
 
 .clotAppWrap {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 .swatchTitle,
@@ -113,7 +112,9 @@
   height: 248px;
   display: block;
   background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+  /*
   animation: shimmer 0.5s infinite;
+  */
   background-size: auto;
   background-size: 1000px 100%;
   transition: 0.25s ease-in-out all;
@@ -239,7 +240,7 @@
   margin-top: 20px;
   border-spacing: 0;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: 14px;
   border-style: hidden;
   width: 100%;
   border: 0.1rem solid rgba(18, 18, 18, 0.2);
@@ -553,14 +554,14 @@
   left: 50%;
   transform: translateX(-50%);
     */
-    z-index: 10;
+    z-index: 5;
   }
 }
 
 .swatchPagination ul {
   display: flex;
   list-style: none;
-  justify-content: center;
+
   gap: 0px;
   padding-left: 0;
   background-color: rgba(255, 255, 255, 0.3);
@@ -701,7 +702,7 @@
     position: sticky;
     top: 72px;
     background-color: #fff;
-    z-index: 99;
+    z-index: 10;
     width: 100%;
   }
 }
@@ -766,7 +767,7 @@
 .filter-accordion-header:after {
   position: absolute;
   content: "";
-  background: transparent url(../src/assets/arrow_black_down@2x.kjb8Drre.png) no-repeat right center;
+  background: transparent url("arrow_black_down@2x.kjb8Drre.png") no-repeat right center;
   top: 0;
   right: 0;
   display: block;
@@ -856,16 +857,45 @@
   cursor: pointer;
 }
 
+@media (max-width: 800px) {
+  .tailor-filter-icon {
+    display: block !important;
+  }
+}
+
 .tailor-filter-icon::after {
   content: "";
   display: block;
   height: 15px;
   width: 25px;
   background-repeat: no-repeat;
-  background-image: url("src/assets/tailor-filter-icon.png");
+  background-image: url("tailor-filter-icon.png");
   background-size: 100% auto;
 }
 
 .stock-list.filter-accordion-header + ul li {
   text-transform: uppercase;
+}
+
+/* paginatio refactor code here */
+
+.paginationScrollCanvas {
+  width: 182px;
+  overflow-x: hidden;
+}
+
+.paginationScrollCanvas ul {
+  transition: all 0.2s ease-in;
+  transform: translateX(78px);
+}
+
+.swatchPagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pageNP {
+  cursor: pointer;
+  background-color: #e4e4e7;
+  padding: 5px;
 }

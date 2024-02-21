@@ -6,6 +6,8 @@ import RemoveSVG from "./components/RemoveSVG.jsx";
 import SelectFilters from "./components/filter/SelectFilters.jsx";
 import AccordianFilters from "./components/filter/AccordianFilters.jsx";
 
+import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
+
 import "./App.css";
 import Loader from "./components/loader.jsx";
 
@@ -32,8 +34,50 @@ function App() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [haveFilters, setHaveFilters] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-
   const [stockAccordian, setStockAccordian] = useState(false);
+
+  const [paginationOffset, setPaginationOffset] = useState();
+
+  const paginationOffsetHelper = () => {
+    let page = parseInt(listMeta.page);
+    let offset = page * 26 - 104;
+
+    console.log("caculated offset", paginationOffset);
+
+    return offset + "px";
+  };
+
+  const handlePageNP = (direction) => {
+    /*
+    setsSatches_request_url((existingUrl) => updateQueryStringParameter(existingUrl, "page", pageNo));
+    */
+
+    let currentPage = parseInt(listMeta.page);
+    let totalPages = parseInt(listMeta.pages);
+
+    if (currentPage == 1 && direction == "prev") {
+      return true;
+    }
+
+    if (currentPage == totalPages && direction == "next") {
+      return true;
+    }
+
+    let targetedPage = direction == "next" ? currentPage + 1 : currentPage - 1;
+
+    setsSatches_request_url((existingUrl) => updateQueryStringParameter(existingUrl, "page", targetedPage));
+
+    /*
+    {
+    "page": "2",
+    "limit": 12,
+    "offset": 12,
+    "total": "452",
+    "pages": 38,
+    "source": "all"
+}  
+    */
+  };
 
   useEffect(() => {
     // Add or remove the class based on the modalActive state
@@ -84,6 +128,8 @@ function App() {
 
       return appliedUrl;
     });
+
+    setPaginationOffset((oldvalue) => "0px");
   };
 
   const handleSource = (e, source) => {
@@ -128,6 +174,8 @@ function App() {
     });
 
     setShowFilters(!showFilters);
+
+    setPaginationOffset((oldvalue) => "0px");
   };
 
   const removeFilters = () => {
@@ -178,6 +226,13 @@ function App() {
   }, [selectedFilters]);
 
   useEffect(() => {
+    setTimeout(() => {
+      let updatedPaginationOffset = paginationOffsetHelper();
+      setPaginationOffset((oldValue) => updatedPaginationOffset);
+    }, 0);
+  }, [listMeta]);
+
+  useEffect(() => {
     (async () => {
       setLoading(true);
 
@@ -225,6 +280,10 @@ function App() {
 
     setHaveFilters(isFilterACtive);
   }, [swatches_request_url]);
+
+  const ulStyle = {
+    transform: `translateX(-${paginationOffset})`,
+  };
 
   return (
     <>
@@ -284,16 +343,25 @@ function App() {
 
           <div className="swatchListings box-border">
             <div className="swatchPagination">
-              <ul>
-                {pages.length > 1 &&
-                  pages.map((pageNO, pageIndex) => (
-                    <li key={pageIndex} className={listMeta.page == pageNO ? "active-page" : ""}>
-                      <a href="#" onClick={(e) => handlePaginate(e, pageNO)}>
-                        {pageNO}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
+              <div className="pageNP pagePre" onClick={() => handlePageNP("prev")}>
+                <SlArrowLeft />
+              </div>
+
+              <div className="paginationScrollCanvas">
+                <ul style={ulStyle}>
+                  {pages.length > 1 &&
+                    pages.map((pageNO, pageIndex) => (
+                      <li key={pageIndex} className={listMeta.page == pageNO ? "active-page" : ""}>
+                        <a href="#" onClick={(e) => handlePaginate(e, pageNO)}>
+                          {pageNO}
+                        </a>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+              <div className="pageNP pageNext" onClick={() => handlePageNP("next")}>
+                <SlArrowRight />
+              </div>
             </div>
 
             <div className={`swatchItemListing ${!loading ? "loaded-grid" : "pending-grid"}`}>

@@ -1,8 +1,8 @@
 /*
-const API_BASE_URL = "https://tailormade.webential.live/";
+const API_BASE_URL = "http://tailormade.local/";
 */
 
-const API_BASE_URL = "http://tailormade.local/";
+const API_BASE_URL = "https://tailormade.webential.live/";
 
 function generateNumberArray(size) {
   return Array.from({ length: size }, (_, index) => index + 1);
